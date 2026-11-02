@@ -1,0 +1,30 @@
+# Build outputs
+/target/
+/build/
+/bin/
+/out/
+
+# FXGL / Java runtime generated files
+/system/
+/logs/
+*.log
+hs_err_pid*.log
+
+# IDE files
+/.idea/
+/.vscode/
+*.iml
+.classpath
+.project
+.settings/
+
+# Compiled Java classes
+*.class
+
+# Maven wrapper downloaded files (if used later)
+.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.properties
+
+# OS files
+.DS_Store
+Thumbs.db
