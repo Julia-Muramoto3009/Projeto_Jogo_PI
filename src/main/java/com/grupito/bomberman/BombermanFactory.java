@@ -1,14 +1,15 @@
+package com.grupito.bomberman;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
+import static com.almasb.fxgl.dsl.FXGL.onKey;
 import com.almasb.fxgl.entity.Entity;
+
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-// Importação estática recomendada para facilidades da DSL do FXGL
-import static com.almasb.fxgl.dsl.FXGL.*;
-
-public class BombermanApp extends GameApplication {
+public class BombermanFactory extends GameApplication {
 
     private Entity player;
 
@@ -34,11 +35,13 @@ public class BombermanApp extends GameApplication {
     // 3. Mapeamento de Entradas de Teclado (Controles)
     @Override
     protected void initInput() {
-        onKey(KeyCode.RIGHT, () -> player.translateX(5));
-        onKey(KeyCode.LEFT,  () -> player.translateX(-5));
-        onKey(KeyCode.UP,    () -> player.translateY(-5));
-        onKey(KeyCode.DOWN,  () -> player.translateY(5));
+        onKey(KeyCode.D, () -> player.translateX(5));
+        onKey(KeyCode.A,  () -> player.translateX(-5));
+        onKey(KeyCode.W,    () -> player.translateY(-5));
+        onKey(KeyCode.S,  () -> player.translateY(5));
     }
+
+    
 
     // Método main para disparar a aplicação JavaFX / FXGL
     public static void main(String[] args) {
