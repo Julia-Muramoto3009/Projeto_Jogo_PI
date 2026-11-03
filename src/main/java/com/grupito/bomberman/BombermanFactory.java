@@ -1,6 +1,7 @@
 package com.grupito.bomberman;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.texture.AnimatedTexture;
 import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
 import static com.almasb.fxgl.dsl.FXGL.onKey;
 import com.almasb.fxgl.entity.Entity;
@@ -12,14 +13,15 @@ import javafx.scene.shape.Rectangle;
 public class BombermanFactory extends GameApplication {
 
     private Entity player;
+    private Entity bloco;
 
     // 1. Configurações da Janela
     @Override
     protected void initSettings(GameSettings settings) {
-        settings.setWidth(800);
-        settings.setHeight(600);
-        settings.setTitle("Bomberman FXGL - Inicial");
-        settings.setVersion("1.0");
+        settings.setWidth(832);
+        settings.setHeight(960);
+        settings.setTitle("Bomberman");
+        settings.setVersion("0.1.0");
     }
 
     // 2. Inicialização das Entidades do Jogo
@@ -28,7 +30,12 @@ public class BombermanFactory extends GameApplication {
         // Criando o bloco inicial que representa o Jogador
         player = entityBuilder()
                 .at(100, 100) // Posição inicial (x, y)
-                .view(new Rectangle(40, 40, Color.BLUE)) // Representação gráfica
+                .view("icon.png") // Representação gráfica
+                .buildAndAttach(); // Finaliza e adiciona à cena
+
+        bloco = entityBuilder()
+                .at(0, 0) // Posição inicial (x, y)
+                .view("HardWall64.png") // Representação gráfica
                 .buildAndAttach(); // Finaliza e adiciona à cena
     }
 
