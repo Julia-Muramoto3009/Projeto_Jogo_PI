@@ -13,7 +13,7 @@ Projeto com objetivo de **aprendizado**, desenvolvido em grupo por 3 pessoas.
 
 ## Como rodar
 
-Pré-requisitos: JDK 17.0.20  e Maven 3.10.0 (rode `java -version` e `mvn -version` no terminal para verificar).
+Pré-requisitos: JDK 21.0.00  e Maven 3.10.0 (rode `java -version` e `mvn -version` no terminal para verificar).
 
 ```bash
 mvn clean javafx:run
