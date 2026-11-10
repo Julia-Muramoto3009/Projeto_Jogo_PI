@@ -7,8 +7,8 @@ public class Main extends GameApplication {
 
     @Override
     protected void initSettings(GameSettings settings) {
-        settings.setWidth(720);
-        settings.setHeight(624);
+        settings.setWidth(960);
+        settings.setHeight(832);
         settings.setTitle("Bomberman");
         settings.setVersion("0.1");
     }

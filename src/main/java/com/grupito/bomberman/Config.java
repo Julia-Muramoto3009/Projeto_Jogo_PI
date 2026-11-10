@@ -2,7 +2,7 @@ package com.grupito.bomberman;
 
 public class Config {
     // Mundo 
-    public static final int TILE = 48;
+    public static final int TILE = 64;
     public static final int COLS = 15;
     public static final int ROWS = 13;
     
