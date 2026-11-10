@@ -2,11 +2,13 @@ package com.grupito.bomberman;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.dsl.FXGL;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.onKey;
 import static com.almasb.fxgl.dsl.FXGL.onKeyDown;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.physics.CollisionHandler;
 
 import javafx.scene.input.KeyCode;
 
@@ -27,7 +29,7 @@ public class Main extends GameApplication {
     protected void initGame() {
         getGameWorld().addEntityFactory(new BombermanFactory());
         
-        player = spawn("player", 48, 48);
+        player = spawn("player",0,0);
     }
 
     // 3. Mapeamento de Entradas de Teclado (Controles)
@@ -42,6 +44,15 @@ public class Main extends GameApplication {
             int tileY = (int) (player.getCenter().getY() / Config.TILE);
             spawn("bomb", tileX * Config.TILE, tileY * Config.TILE);
         });
+    }
+
+    protected void initPhysics(){
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.BOMB, EntityType.PLAYER){
+            protected void onCollisionBegin(Entity bomb, Entity player){
+                player.removeFromWorld();
+            }
+        });
+
     }
 
     public static void main(String[] args) {

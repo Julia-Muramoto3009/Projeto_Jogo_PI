@@ -9,7 +9,6 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.grupito.bomberman.components.Bomb;
-import com.grupito.bomberman.components.Player;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -22,8 +21,8 @@ public class BombermanFactory  implements EntityFactory {
         return entityBuilder(data)
                 .type(EntityType.PLAYER)
                 .viewWithBBox(texture("bomberman.png"))
-                .with(new Player())
-                .build();
+                .with(new CollidableComponent(true))
+                .buildAndAttach();
     }
 
     @Spawns("bomb")
@@ -34,7 +33,7 @@ public class BombermanFactory  implements EntityFactory {
         return entityBuilder(data)
                 .type(EntityType.BOMB)
                 .viewWithBBox(new Rectangle(Config.TILE, Config.TILE, Color.DARKRED)) // placeholder
-                .with(new Bomb(range))
+                .with(new CollidableComponent(true),new Bomb(range))
                 .build();
     }
     
