@@ -43,8 +43,8 @@ public class Bomb extends Component {
         exploded = true;
 
         // Posição da bomba convertida de pixels para tile
-        int tileX = (int) (entity.getX() / Config.TILE_SIZE);
-        int tileY = (int) (entity.getY() / Config.TILE_SIZE);
+        int tileX = (int) (entity.getX() / Config.TILE);
+        int tileY = (int) (entity.getY() / Config.TILE);
 
         // A bomba some
         entity.removeFromWorld();
@@ -80,7 +80,7 @@ public class Bomb extends Component {
     }
 
     private void spawnFlame(int tileX, int tileY) {
-        spawn("explosion", tileX * Config.TILE_SIZE, tileY * Config.TILE_SIZE);
+        spawn("explosion", tileX * Config.TILE, tileY * Config.TILE);
     }
 
     /**
@@ -89,7 +89,7 @@ public class Bomb extends Component {
      * pode ser trocada por uma leitura da matriz.
      */
     private boolean hasEntityOfType(int tileX, int tileY, EntityType type) {
-        double size = Config.TILE_SIZE;
+        double size = Config.TILE;
 
         // Margem de 2px para não capturar entidades dos tiles vizinhos
         Rectangle2D area = new Rectangle2D(

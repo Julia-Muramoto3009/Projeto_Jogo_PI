@@ -38,9 +38,9 @@ public class Main extends GameApplication {
         onKey(KeyCode.W, "Andar para Cima",   () -> player.translateY(-5));
         onKey(KeyCode.S, "Andar para Baixo", () -> player.translateY(5));
         onKeyDown(KeyCode.SPACE, "Colocar bomba", () -> {
-            int tileX = (int) (player.getCenter().getX() / Config.TILE_SIZE);
-            int tileY = (int) (player.getCenter().getY() / Config.TILE_SIZE);
-            spawn("bomb", tileX * Config.TILE_SIZE, tileY * Config.TILE_SIZE);
+            int tileX = (int) (player.getCenter().getX() / Config.TILE);
+            int tileY = (int) (player.getCenter().getY() / Config.TILE);
+            spawn("bomb", tileX * Config.TILE, tileY * Config.TILE);
         });
     }
 

@@ -33,7 +33,7 @@ public class BombermanFactory  implements EntityFactory {
 
         return entityBuilder(data)
                 .type(EntityType.BOMB)
-                .viewWithBBox(new Rectangle(Config.TILE_SIZE, Config.TILE_SIZE, Color.DARKRED)) // placeholder
+                .viewWithBBox(new Rectangle(Config.TILE, Config.TILE, Color.DARKRED)) // placeholder
                 .with(new Bomb(range))
                 .build();
     }
@@ -42,7 +42,7 @@ public class BombermanFactory  implements EntityFactory {
     public Entity newExplosion(SpawnData data) {
         return entityBuilder(data)
                 .type(EntityType.EXPLOSION)
-                .viewWithBBox(new Rectangle(Config.TILE_SIZE, Config.TILE_SIZE, Color.ORANGE)) // placeholder
+                .viewWithBBox(new Rectangle(Config.TILE, Config.TILE, Color.ORANGE)) // placeholder
                 .with(new CollidableComponent(true))
                 .with(new ExpireCleanComponent(Duration.seconds(Config.EXPLOSION_DURATION)))
                 .build();
