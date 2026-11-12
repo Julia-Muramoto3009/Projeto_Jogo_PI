@@ -2,13 +2,12 @@ package com.grupito.bomberman;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
-import com.almasb.fxgl.dsl.FXGL;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.onKey;
 import static com.almasb.fxgl.dsl.FXGL.onKeyDown;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.physics.CollisionHandler;
+import com.grupito.bomberman.components.Player;
 
 import javafx.scene.input.KeyCode;
 
@@ -35,24 +34,23 @@ public class Main extends GameApplication {
     // 3. Mapeamento de Entradas de Teclado (Controles)
     @Override
     protected void initInput() {
-        onKey(KeyCode.D,"Andar para Direita", () -> player.translateX(5));
-        onKey(KeyCode.A, "Andar para Esquerda", () -> player.translateX(-5));
-        onKey(KeyCode.W, "Andar para Cima",   () -> player.translateY(-5));
-        onKey(KeyCode.S, "Andar para Baixo", () -> player.translateY(5));
+        onKey(KeyCode.D, "Direita",  () -> player.getComponent(Player.class).moveRight());
+        onKey(KeyCode.A, "Esquerda", () -> player.getComponent(Player.class).moveLeft());
+        onKey(KeyCode.W, "Cima",     () -> player.getComponent(Player.class).moveUp());
+        onKey(KeyCode.S, "Baixo",    () -> player.getComponent(Player.class).moveDown());
         onKeyDown(KeyCode.SPACE, "Colocar bomba", () -> {
             int tileX = (int) (player.getCenter().getX() / Config.TILE);
             int tileY = (int) (player.getCenter().getY() / Config.TILE);
-            spawn("bomb", tileX * Config.TILE, tileY * Config.TILE);
-        });
-    }
+            double x = tileX * Config.TILE;
+            double y = tileY * Config.TILE;
 
-    protected void initPhysics(){
-        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.BOMB, EntityType.PLAYER){
-            protected void onCollisionBegin(Entity bomb, Entity player){
-                player.removeFromWorld();
+            boolean jaTemBomba = getGameWorld().getEntitiesByType(EntityType.BOMB).stream()
+                    .anyMatch(b -> b.getX() == x && b.getY() == y);
+
+            if (!jaTemBomba) {
+                spawn("bomb", x, y);
             }
         });
-
     }
 
     public static void main(String[] args) {
