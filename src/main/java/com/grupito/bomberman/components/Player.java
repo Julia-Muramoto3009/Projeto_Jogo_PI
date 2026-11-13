@@ -20,8 +20,8 @@ import javafx.geometry.Rectangle2D;
  */
 public class Player extends Component {
 
-    private static double SPEED = 200;   // pixels por segundo
-    private static double MARGIN = 4;    // folga da hitbox (evita "agarrar" em quinas)
+    private static final double SPEED = 200;   // pixels por segundo
+    private static final double MARGIN = 8;    // folga da hitbox
 
     public void moveRight() { move(SPEED * tpf(), 0); }
     public void moveLeft()  { move(-SPEED * tpf(), 0); }
@@ -29,8 +29,7 @@ public class Player extends Component {
     public void moveDown()  { move(0, SPEED * tpf()); }
 
     /**
-     * Move um eixo de cada vez. Assim, se um eixo está bloqueado, o outro ainda
-     * anda e o jogador "desliza" pela parede em vez de travar.
+     Limitação do movimento do personagem
      */
     private void move(double dx, double dy) {
         if (dx != 0 && canMoveTo(entity.getX() + dx, entity.getY())) {

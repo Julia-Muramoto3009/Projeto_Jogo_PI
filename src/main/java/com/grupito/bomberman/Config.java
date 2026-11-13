@@ -2,7 +2,7 @@ package com.grupito.bomberman;
 
 public class Config {
     // Bombas
-    public static final double BOMB_FUSE_SECONDS = 2.0;      // tempo até a bomba explodir
+    public static final double BOMB_FUSE_SECONDS = 2.5;      // tempo até a bomba explodir
     public static final double EXPLOSION_DURATION = 0.5;     // tempo que a chama fica na tela
     public static final int BOMB_RANGE = 2;                  // alcance inicial (em tiles)
 
@@ -20,5 +20,5 @@ public class Config {
 
     // Player
     public static final int PLAYER_LIVES = 3;
-    public static final double INVINCIBLE_SECONDS = 2;
+    public static final double INVINCIBLE_SECONDS = 1;
 }
