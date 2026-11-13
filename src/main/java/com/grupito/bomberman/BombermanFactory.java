@@ -22,6 +22,7 @@ public class BombermanFactory  implements EntityFactory {
         return entityBuilder(data)
                 .type(EntityType.PLAYER)
                 .viewWithBBox(texture("bomberman.png"))
+                .with(new CollidableComponent(true))
                 .with(new Player())
                 .build();
     }
@@ -34,7 +35,7 @@ public class BombermanFactory  implements EntityFactory {
         return entityBuilder(data)
                 .type(EntityType.BOMB)
                 .viewWithBBox(new Rectangle(Config.TILE, Config.TILE, Color.DARKRED)) // placeholder
-                .with(new Bomb(range))
+                .with(new CollidableComponent(true),new Bomb(range))
                 .build();
     }
     
