@@ -2,6 +2,9 @@ package com.grupito.bomberman;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.app.scene.FXGLMenu;
+import com.almasb.fxgl.app.scene.SceneFactory;
+
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.onKey;
 import static com.almasb.fxgl.dsl.FXGL.onKeyDown;
@@ -9,10 +12,22 @@ import static com.almasb.fxgl.dsl.FXGL.spawn;
 import com.almasb.fxgl.entity.Entity;
 import com.grupito.bomberman.components.Player;
 
+import javafx.geometry.Point2D;
+import javafx.scene.control.Menu;
 import javafx.scene.input.KeyCode;
 
 public class Main extends GameApplication {
     private Entity player;
+
+    // 0. Fluxo do Jogo
+    private static boolean advancing = false;
+    private static int level = 1;
+    private static int carriedScore = 0;
+    private static int carriedLives = Config.PLAYER_LIVES;
+
+    private static boolean invincible = false;
+    private static boolean ending = false;
+    private static Point2D playerSpawn = new Point2D(0, 0);
 
     // 1. Configurações da Janela
     @Override
@@ -21,23 +36,35 @@ public class Main extends GameApplication {
         settings.setHeight(832);
         settings.setTitle("Bomberman");
         settings.setVersion("0.1");
+
+        // Menu principal e menu de pausa
+        settings.setMainMenuEnabled(true);
+        settings.setGameMenuEnabled(true);
+        settings.setSceneFactory(new SceneFactory() {
+            
+            @Override
+            public FXGLMenu newMainMenu() {
+                return new Menu();
+            }
+        });
+    
     }
 
     // 2. Inicialização das Entidades do Jogo
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(new BombermanFactory());
-        
-        player = spawn("player",0,0);
+
+        player = spawn("player", 0, 0);
     }
 
     // 3. Mapeamento de Entradas de Teclado (Controles)
     @Override
     protected void initInput() {
-        onKey(KeyCode.D, "Direita",  () -> player.getComponent(Player.class).moveRight());
+        onKey(KeyCode.D, "Direita", () -> player.getComponent(Player.class).moveRight());
         onKey(KeyCode.A, "Esquerda", () -> player.getComponent(Player.class).moveLeft());
-        onKey(KeyCode.W, "Cima",     () -> player.getComponent(Player.class).moveUp());
-        onKey(KeyCode.S, "Baixo",    () -> player.getComponent(Player.class).moveDown());
+        onKey(KeyCode.W, "Cima", () -> player.getComponent(Player.class).moveUp());
+        onKey(KeyCode.S, "Baixo", () -> player.getComponent(Player.class).moveDown());
         onKeyDown(KeyCode.SPACE, "Colocar bomba", () -> {
             int tileX = (int) (player.getCenter().getX() / Config.TILE);
             int tileY = (int) (player.getCenter().getY() / Config.TILE);

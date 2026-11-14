@@ -20,5 +20,5 @@ public class Config {
 
     // Player
     public static final int PLAYER_LIVES = 3;
-    public static final double INVINCIBLE_SECONDS = 1;
+    public static final double INVINCIBLE_SECONDS = 2;
 }
