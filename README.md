@@ -95,7 +95,7 @@ Todos esses valores ficam em `Config.java` e podem ser ajustados em um lugar só
     │   │   └── Wall.java           Paredes e tijolos destrutíveis
     │   ├── level/
     │   │   └── LevelLoader.java    Lê o arquivo da fase e cria as entidades
-    │   └── ui/
+    │   └── Telas/
     │       └── Menu.java           Menu e telas (HUD, game over, vitória)
     └── resources/assets/           Recursos carregados pelo FXGL
         ├── levels/                 Mapas das fases
