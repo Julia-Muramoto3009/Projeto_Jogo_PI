@@ -10,7 +10,12 @@ import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.grupito.bomberman.components.Bomb;
 import com.grupito.bomberman.components.Player;
+import com.almasb.fxgl.physics.BoundingShape;
+import com.almasb.fxgl.physics.HitBox;
+import com.grupito.bomberman.components.Monster;
 
+import javafx.geometry.Point2D;
+import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -49,4 +54,19 @@ public class BombermanFactory  implements EntityFactory {
                 .build();
     }
 
+    @Spawns("monster")
+    public Entity newMonster(SpawnData data) {
+        int t = Config.TILE;
+        // Hitbox menor que a célula: o jogador só morre ao encostar de verdade
+        HitBox hitBox = new HitBox(new Point2D(12, 12), BoundingShape.box(t - 24, t - 24));
+
+        return entityBuilder(data)
+                .type(EntityType.ENEMY)
+                .view(new Circle(t / 2.0, t / 2.0, t / 2.0 - 8, Color.CRIMSON))
+                .bbox(hitBox)
+                .collidable()
+                .zIndex(10)
+                .with(new Monster(Config.ENEMIES_SPEED))
+                .build();
+    }
 }
