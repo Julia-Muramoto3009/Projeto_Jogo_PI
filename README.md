@@ -78,7 +78,7 @@ Todos esses valores ficam em `Config.java` e podem ser ajustados em um lugar só
 ```
 .
 ├── pom.xml                 Dependências (FXGL) e configuração do Maven
-├── README.md               Este arquivo
+├── README.md               
 ├── .gitignore              Arquivos que não vão para o Git
 └── src/main/
     ├── java/com/grupito/bomberman/
