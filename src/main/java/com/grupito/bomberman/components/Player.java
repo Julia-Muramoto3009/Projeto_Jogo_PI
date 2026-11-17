@@ -1,17 +1,18 @@
 package com.grupito.bomberman.components;
 
+import com.almasb.fxgl.dsl.FXGL;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.tpf;
-
-import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import com.grupito.bomberman.Config;
 import com.grupito.bomberman.EntityType;
-import com.almasb.*;
+
+import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
+import javafx.util.Duration;
 
 
 /**
@@ -27,19 +28,15 @@ public class Player extends Component {
 
     private static final double SPEED = 200;   // pixels por segundo
     private static final double MARGIN = 8;    // folga da hitbox
+    private static final double IDLE_DELAY = 0.1;
 
-    public void moveRight() { move(SPEED * tpf(), 0); }
-    public void moveLeft()  { move(-SPEED * tpf(), 0); }
-    public void moveUp()    { move(0, -SPEED * tpf()); }
-    public void moveDown()  { move(0, SPEED * tpf()); }
+    private final AnimatedTexture texture;
+    private final AnimationChannel animIdle, animWalk_W, animWalk_A, animWalk_S, animWalk_D;
+    private double timeWithoutMovement;
 
-
-    private AnimatedTexture texture;
-    private AnimationChannel animIdle, animWalk_W, animWalk_A, animWalk_S, animWalk_D;
-    // Animação
-        public AnimationComponent() {
+    public Player() {
         animIdle = new AnimationChannel(FXGL.image("Bomberman_sprite.png"), 4, 64, 64, Duration.seconds(1), 2, 2);
-        animWalk_W = new AnimationChannel(FXGL.image("Bomberman_sprite.png"), 4, 64, 64, Duration.seconds(1), 3, 4);
+        animWalk_W = new AnimationChannel(FXGL.image("Bomberman_sprite.png"), 4, 64, 64, Duration.seconds(1), 0, 0);
         animWalk_A = new AnimationChannel(FXGL.image("Bomberman_sprite.png"), 4, 64, 64, Duration.seconds(1), 5, 7);
         animWalk_S = new AnimationChannel(FXGL.image("Bomberman_sprite.png"), 4, 64, 64, Duration.seconds(1), 2, 4);
         animWalk_D = new AnimationChannel(FXGL.image("Bomberman_sprite.png"), 4, 64, 64, Duration.seconds(1), 8, 10);
@@ -47,18 +44,41 @@ public class Player extends Component {
         texture = new AnimatedTexture(animIdle);
     }
 
+    public void moveRight() { move(SPEED * tpf(), 0, animWalk_D); }
+    public void moveLeft()  { move(-SPEED * tpf(), 0, animWalk_A); }
+    public void moveUp()    { move(0, -SPEED * tpf(), animWalk_W); }
+    public void moveDown()  { move(0, SPEED * tpf(), animWalk_S); }
 
-
+    private void playAnimation(AnimationChannel channel) {
+        if (texture.getAnimationChannel() != channel) {
+            texture.loopAnimationChannel(channel);
+        }
+    }
 
     /**
      Limitação do movimento do personagem
      */
-    private void move(double dx, double dy) {
+    private void move(double dx, double dy, AnimationChannel animation) {
+        timeWithoutMovement = 0;
+        boolean moved = false;
+
         if (dx != 0 && canMoveTo(entity.getX() + dx, entity.getY())) {
             entity.translateX(dx);
+            moved = true;
         }
         if (dy != 0 && canMoveTo(entity.getX(), entity.getY() + dy)) {
             entity.translateY(dy);
+            moved = true;
+        }
+
+        playAnimation(moved ? animation : animIdle);
+    }
+
+    @Override
+    public void onUpdate(double tpf) {
+        timeWithoutMovement += tpf;
+        if (timeWithoutMovement >= IDLE_DELAY) {
+            playAnimation(animIdle);
         }
     }
 
@@ -96,4 +116,11 @@ public class Player extends Component {
         }
         return true;
     }
+
+    @Override
+    public void onAdded() {
+        entity.getTransformComponent().setScaleOrigin(new Point2D(16, 21));
+        entity.getViewComponent().addChild(texture);
+    }
+
 }
