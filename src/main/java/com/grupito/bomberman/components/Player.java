@@ -35,11 +35,11 @@ public class Player extends Component {
     private double timeWithoutMovement;
 
     public Player() {
-        animIdle = new AnimationChannel(FXGL.image("Bomberman_sprite3.png"), 4, 64, 64, Duration.seconds(1), 4, 4);
-        animWalk_W = new AnimationChannel(FXGL.image("Bomberman_sprite3.png"), 4, 64, 64, Duration.seconds(1), 0, 2);
-        animWalk_A = new AnimationChannel(FXGL.image("Bomberman_sprite3.png"), 4, 64, 64, Duration.seconds(1), 6, 8);
-        animWalk_S = new AnimationChannel(FXGL.image("Bomberman_sprite3.png"), 4, 64, 64, Duration.seconds(1), 3, 5);
-        animWalk_D = new AnimationChannel(FXGL.image("Bomberman_sprite3.png"), 4, 64, 64, Duration.seconds(1), 9, 11);
+        animIdle = new AnimationChannel(FXGL.image("Bomberman_sprite.png"), 4, 64, 64, Duration.seconds(1), 4, 4);
+        animWalk_W = new AnimationChannel(FXGL.image("Bomberman_sprite.png"), 4, 64, 64, Duration.seconds(1), 0, 2);
+        animWalk_A = new AnimationChannel(FXGL.image("Bomberman_sprite.png"), 4, 64, 64, Duration.seconds(1), 6, 8);
+        animWalk_S = new AnimationChannel(FXGL.image("Bomberman_sprite.png"), 4, 64, 64, Duration.seconds(1), 3, 5);
+        animWalk_D = new AnimationChannel(FXGL.image("Bomberman_sprite.png"), 4, 64, 64, Duration.seconds(1), 9, 11);
 
         texture = new AnimatedTexture(animIdle);
     }
