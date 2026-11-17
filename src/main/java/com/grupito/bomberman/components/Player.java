@@ -2,12 +2,17 @@ package com.grupito.bomberman.components;
 
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.tpf;
+
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.texture.AnimatedTexture;
+import com.almasb.fxgl.texture.AnimationChannel;
 import com.grupito.bomberman.Config;
 import com.grupito.bomberman.EntityType;
-
+import com.almasb.*;
 import javafx.geometry.Rectangle2D;
+
 
 /**
  * Comportamento do jogador: movimento com bloqueio por obstáculos.
@@ -27,6 +32,23 @@ public class Player extends Component {
     public void moveLeft()  { move(-SPEED * tpf(), 0); }
     public void moveUp()    { move(0, -SPEED * tpf()); }
     public void moveDown()  { move(0, SPEED * tpf()); }
+
+
+    private AnimatedTexture texture;
+    private AnimationChannel animIdle, animWalk_W, animWalk_A, animWalk_S, animWalk_D;
+    // Animação
+        public AnimationComponent() {
+        animIdle = new AnimationChannel(FXGL.image("Bomberman_sprite.png"), 4, 64, 64, Duration.seconds(1), 2, 2);
+        animWalk_W = new AnimationChannel(FXGL.image("Bomberman_sprite.png"), 4, 64, 64, Duration.seconds(1), 3, 4);
+        animWalk_A = new AnimationChannel(FXGL.image("Bomberman_sprite.png"), 4, 64, 64, Duration.seconds(1), 5, 7);
+        animWalk_S = new AnimationChannel(FXGL.image("Bomberman_sprite.png"), 4, 64, 64, Duration.seconds(1), 2, 4);
+        animWalk_D = new AnimationChannel(FXGL.image("Bomberman_sprite.png"), 4, 64, 64, Duration.seconds(1), 8, 10);
+
+        texture = new AnimatedTexture(animIdle);
+    }
+
+
+
 
     /**
      Limitação do movimento do personagem
