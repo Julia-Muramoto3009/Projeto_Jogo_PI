@@ -1,22 +1,21 @@
 package com.grupito.bomberman;
 
 import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
-import static com.almasb.fxgl.dsl.FXGL.texture;
 import com.almasb.fxgl.dsl.components.ExpireCleanComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.CollidableComponent;
-import com.grupito.bomberman.components.Bomb;
-import com.grupito.bomberman.components.Player;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
+import com.grupito.bomberman.components.Bomb;
 import com.grupito.bomberman.components.Monster;
+import com.grupito.bomberman.components.Player;
 
 import javafx.geometry.Point2D;
-import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
@@ -26,7 +25,8 @@ public class BombermanFactory  implements EntityFactory {
     public Entity newPlayer(SpawnData data) {
         return entityBuilder(data)
                 .type(EntityType.PLAYER)
-                .viewWithBBox(texture("bomberman.png"))
+                .bbox(new HitBox(BoundingShape.box(48,64))) // hitbox menor que a célula
+                //.viewWithBBox(texture("bomberman.png"))
                 .with(new CollidableComponent(true))
                 .with(new Player())
                 .build();
