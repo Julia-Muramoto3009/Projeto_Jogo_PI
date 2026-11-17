@@ -95,14 +95,13 @@ Todos esses valores ficam em `Config.java` e podem ser ajustados em um lugar só
     │   │   └── Wall.java           Paredes e tijolos destrutíveis
     │   ├── level/
     │   │   └── LevelLoader.java    Lê o arquivo da fase e cria as entidades
-    │   └── Telas/
+    │   └── UI/
     │       └── Menu.java           Menu e telas (HUD, game over, vitória)
     └── resources/assets/           Recursos carregados pelo FXGL
         ├── levels/                 Mapas das fases
         ├── textures/               Imagens (sprites, ícones)
         ├── sounds/                 Efeitos sonoros curtos (.wav)
         ├── music/                  Trilhas musicais (.mp3)
-        └── ui/                     Imagens e recursos de interface
 ```
 
 > O FXGL procura os recursos em `src/main/resources/assets/<tipo>/`. Por isso os arquivos precisam estar nessas pastas, e o nome usado no código deve ser **idêntico** ao do arquivo (ex.: `texture("Bomberman_sprite.png")`).
