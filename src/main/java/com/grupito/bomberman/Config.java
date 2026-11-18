@@ -11,6 +11,17 @@ public class Config {
     public static final int COLS = 15;
     public static final int ROWS = 13;
     
+     // Janela e HUD
+    public static final int WINDOW_W = 1060;
+    public static final int WINDOW_H = 960;
+
+    public static final int MAP_W = COLS * TILE;
+    public static final int MAP_H = ROWS * TILE;
+
+    public static final int MAP_X = (WINDOW_W - MAP_W) / 2;
+    public static final int HUD_TOP = 64;
+    public static final int HUD_BOTTOM = WINDOW_H - HUD_TOP - MAP_H; 
+   
     // Inimigos
     public static final double ENEMIES_SPEED = 60;
     public static final int  SCORE_MONSTER = 100;
