@@ -1,12 +1,6 @@
 package com.grupito.bomberman;
 
-import java.util.Map;
-
-import com.almasb.fxgl.app.GameApplication;
-import com.almasb.fxgl.app.GameSettings;
-import com.almasb.fxgl.app.scene.FXGLMenu;
-import com.almasb.fxgl.app.scene.SceneFactory;
-import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
+import static com.almasb.fxgl.dsl.FXGL.geti;
 import static com.almasb.fxgl.dsl.FXGL.getGameController;
 import static com.almasb.fxgl.dsl.FXGL.getGameScene;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
@@ -30,7 +24,7 @@ import javafx.util.Duration;
 public class Main extends GameApplication {
     private Entity player;
 
-    // 0. Fluxo do Jogo 
+    // 0. Fluxo do Jogo (Julia)
     // Valores que sobrevivem ao startNewGame() (que recria as variáveis do jogo)
     private static boolean advancing = false;
     private static int level = 1;
@@ -62,7 +56,7 @@ public class Main extends GameApplication {
         });
     }
 
-    // 2. Variáveis do jogo 
+    // 2. Variáveis do jogo (Julia)
     @Override
     protected void initGameVars(Map<String, Object> vars) {
         if (!advancing) { // jogo novo (menu ou depois de game over)
@@ -144,11 +138,11 @@ public class Main extends GameApplication {
         });
     }
 
-    // 5. Colisões 
+    // 5. Colisões (Julia)
     @Override
     protected void initPhysics() {
         // Encostando no monstro: se não estiver invencível, perde vida
-        onCollision(EntityType.PLAYER, EntityType.ENEMY, (p, monster) -> onPlayerHit(p));
+        onCollision(EntityType.PLAYER, EntityType.ENEMY, (p, monster) -> Main.onPlayerHit(p));
 
         // Explosão atingindo o jogador
         onCollisionBegin(EntityType.EXPLOSION, EntityType.PLAYER, (explosion, p) -> onPlayerHit(p));
@@ -157,7 +151,7 @@ public class Main extends GameApplication {
         onCollisionBegin(EntityType.EXPLOSION, EntityType.ENEMY, (explosion, monster) -> killMonster(monster));
     }
 
-    // 6. Interface 
+    // 6. Interface (Julia)
     @Override
     protected void initUI() {
         Menu.initHud();

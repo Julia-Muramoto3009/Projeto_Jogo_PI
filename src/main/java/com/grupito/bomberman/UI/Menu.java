@@ -56,6 +56,7 @@ public class Menu extends FXGLMenu {
     /** Textos ligados (bind) às variáveis do jogo: atualizam sozinhos. */
         public static void initHud() {
         int x0 = Config.MAP_X;                       // alinha com a borda do mapa
+        @SuppressWarnings("unused")
         int baixoY = Config.HUD_TOP + Config.MAP_H;  // onde começa a faixa de baixo
 
         // ----- faixa de cima: pontos, vidas, fase, inimigos -----
@@ -78,11 +79,12 @@ public class Menu extends FXGLMenu {
         titulo.setText("UPGRADES:");
     }
 
-    private static Text label() {
-        Text t = new Text();
-        t.setFill(Color.WHITE);
-        t.setFont(Font.font("Arial", FontWeight.BOLD, 18));
-        return t;
+    public static Text label() {
+        Text text = new Text();
+        text.setFill(Color.WHITE);
+        text.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+
+        return text;
     }
 
     // ================= Game over, vitória e fim de fase =================
