@@ -35,14 +35,11 @@ public class BombermanFactory  implements EntityFactory {
 
     @Spawns("bomb")
     public Entity newBomb(SpawnData data) {
-        // O alcance pode ser passado no spawn; se não for, usa o padrão
-        Integer requestedRange = data.get("range");
-        int range = requestedRange != null ? requestedRange : Config.BOMB_RANGE;
-
+        int range = data.hasKey("range") ? ((Number) data.get("range")).intValue() : Config.BOMB_RANGE;
         return entityBuilder(data)
                 .type(EntityType.BOMB)
                 .viewWithBBox(new Rectangle(Config.TILE, Config.TILE, Color.DARKRED)) // placeholder
-                .with(new CollidableComponent(true),new Bomb(range))
+                .with(new CollidableComponent(true), new Bomb(range))
                 .build();
     }
     
