@@ -1,41 +1,93 @@
-# Bomberman (FXGL)
+# Bomberman PI
 
-Clone do jogo Bomberman feito em Java com [FXGL](https://github.com/AlmasB/FXGL) e Maven.
-Projeto com objetivo de **aprendizado**, desenvolvido em grupo por 3 pessoas.
+Jogo estilo Bomberman desenvolvido em **Java** com o framework **FXGL**, para a disciplina de PI (Programação Orientada a Objetos), aplicando o que foi aprendido em aula.
 
-## Equipe
+O jogador anda por um labirinto, coloca bombas para abrir caminho, derrota os monstros e avança de fase sem perder todas as vidas.
 
-| Responsável | Área |
+## Sumário
+
+- [Tecnologias](#tecnologias)
+- [Como rodar](#como-rodar)
+- [Controles](#controles)
+- [Regras do jogo](#regras-do-jogo)
+- [Estrutura de pastas](#estrutura-de-pastas)
+- [Como o código funciona](#como-o-código-funciona)
+- [Divisão do trabalho](#divisão-do-trabalho)
+- [Fluxo de trabalho com Git](#fluxo-de-trabalho-com-git)
+- [Pendências](#pendências)
+- [Problemas comuns](#problemas-comuns)
+
+## Tecnologias
+
+| Item | Versão |
 |---|---|
-| Raquel | Jogador e bombas |
-| Leticia | Mundo e itens |
-| Julia | Inimigos, UI e fluxo do jogo |
+| Java (JDK) | 21 ou superior |
+| Maven | 3.9 ou superior |
+| FXGL | 21.1 |
+| IDE sugerida | VS Code (com Extension Pack for Java) |
 
 ## Como rodar
 
-Pré-requisitos: JDK 21.0.00  e Maven 3.10.0 (rode `java -version` e `mvn -version` no terminal para verificar).
+1. Confira as versões instaladas:
 
-```bash
-mvn clean javafx:run
-```
+   ```bash
+   java -version
+   mvn -version
+   ```
+
+   O `java -version` deve mostrar **21 ou superior**. Com um JDK mais antigo a compilação falha com `release version 21 not supported`.
+
+2. Clone o repositório e entre na pasta:
+
+   ```bash
+   git clone https://github.com/Julia-Muramoto3009/Projeto_Jogo_PI.git
+   cd Projeto_Jogo_PI
+   ```
+
+3. Compile e rode:
+
+   ```bash
+   mvn clean javafx:run
+   ```
 
 Se abrir a janela do jogo, o ambiente está correto.
+
+## Controles
+
+| Tecla | Ação |
+|---|---|
+| `W` `A` `S` `D` | Mover o jogador |
+| `Espaço` | Colocar bomba |
+| `Esc` | Pausar |
+| `K` | **Só para teste:** mata um monstro (será removida na versão final) |
+
+## Regras do jogo
+
+- O jogador começa com **3 vidas** e o jogo tem **3 fases**.
+- A bomba explode depois de **2,5 segundos**, em formato de cruz, com alcance inicial de **2 tiles**.
+- A chama **não atravessa paredes fixas** e **para ao atingir um tijolo**, destruindo-o.
+- Tocar em um monstro ou ser atingido por uma explosão **tira uma vida**. O jogador volta ao ponto inicial e fica **invencível por 2 segundos**.
+- Cada monstro derrotado vale **100 pontos**.
+- A fase termina quando todos os monstros forem derrotados.
+- Ao zerar as vidas aparece o **Game Over**, e ao vencer a última fase aparece a tela de **Vitória**. Nos dois casos o jogo volta ao menu principal.
+
+Todos esses valores ficam em `Config.java` e podem ser ajustados em um lugar só.
 
 ## Estrutura de pastas
 
 ```
 .
-├── pom.xml                         Dependências (FXGL) e configuração do Maven
-├── README.md                       Este arquivo
-├── .gitignore                      Arquivos que não vão para o Git
+├── pom.xml                 Dependências (FXGL) e configuração do Maven
+├── README.md               
+├── .gitignore              Arquivos que não vão para o Git
 └── src/main/
     ├── java/com/grupito/bomberman/
-    │   ├── Main.java               Ponto de entrada (GameApplication)
+    │   ├── Main.java               Ponto de entrada (GameApplication), input, física e fluxo do jogo
     │   ├── BombermanFactory.java   Cria as entidades do jogo (@Spawns)
     │   ├── EntityType.java         Enum com os tipos de entidade
     │   ├── Config.java             Constantes (tamanho do tile, velocidades, tempos)
     │   ├── components/             Comportamento de cada entidade
-    │   │   ├── Player.java         Jogador: movimento e ações
+    │   │   ├── Player.java         Jogador: movimento e bloqueio por obstáculos
     │   │   ├── Bomb.java           Bomba: pavio e detonação
     │   │   ├── Explosion.java      Explosão em cruz e seu alcance
     │   │   ├── Monster.java        Inimigos e sua IA
@@ -43,109 +95,126 @@ Se abrir a janela do jogo, o ambiente está correto.
     │   │   └── Wall.java           Paredes e tijolos destrutíveis
     │   ├── level/
     │   │   └── LevelLoader.java    Lê o arquivo da fase e cria as entidades
-    │   └── ui/
+    │   └── UI/
     │       └── Menu.java           Menu e telas (HUD, game over, vitória)
     └── resources/assets/           Recursos carregados pelo FXGL
         ├── levels/                 Mapas das fases
         ├── textures/               Imagens (sprites, ícones)
         ├── sounds/                 Efeitos sonoros curtos (.wav)
         ├── music/                  Trilhas musicais (.mp3)
-        └── ui/                     Imagens e recursos de interface
 ```
 
-> O FXGL procura os recursos em `src/main/resources/assets/<tipo>/`.
-> Por isso os arquivos precisam estar nessas pastas.
+> O FXGL procura os recursos em `src/main/resources/assets/<tipo>/`. Por isso os arquivos precisam estar nessas pastas, e o nome usado no código deve ser **idêntico** ao do arquivo (ex.: `texture("Bomberman_sprite.png")`).
 
 ### Pastas geradas automaticamente (não editar, não versionar)
 
 - `target/`: resultado da compilação do Maven.
-- `logs/`: logs gerados pelo FXGL a cada execução.
-- `system/`: arquivos internos do FXGL.
+- `.vscode/`: configurações locais do editor.
 
-## Arquivos principais
+## Como o código funciona
 
-| Arquivo | Para que serve |
+O FXGL chama os métodos da `Main` nesta ordem. Cada um tem uma função:
+
+| Método | O que faz neste projeto |
 |---|---|
-| `Main.java` | Configura a janela, registra input, colisões e inicia o jogo. Quem precisar registrar algo aqui deve chamar um método da sua área, sem escrever a lógica dentro do `Main`. |
-| `BombermanFactory.java` | Fábrica das entidades. Cada `@Spawns("nome")` descreve como criar um tipo de entidade (jogador, bomba, parede, monstro...). |
-| `EntityType.java` | Lista os tipos de entidade (PLAYER, BOMB, EXPLOSION, WALL, BRICK, ENEMY, POWERUP...). Usado nas colisões e buscas. |
-| `Config.java` | Valores fixos do jogo, como tamanho do tile, velocidade, tempo do pavio e alcance da bomba. |
-| `LevelLoader.java` | Carrega a fase a partir de um arquivo em `assets/levels/` e faz o `spawn` de cada elemento. |
-| `Menu.java` | Menu principal e demais telas. |
+| `initSettings` | Janela 960x832 (15x13 tiles de 64 px), título e menu principal |
+| `initGameVars` | Cria as variáveis `score`, `lives`, `level` e `enemies` |
+| `initGame` | Registra a `BombermanFactory` e cria o jogador e os inimigos |
+| `initInput` | Liga as teclas às ações do jogador |
+| `initPhysics` | Define o que acontece nas colisões (jogador × monstro, explosão × monstro, explosão × jogador) |
+| `initUI` | Cria o HUD (pontos, vidas, fase e inimigos) |
 
-## Mapas das fases
+Conceitos usados:
 
-Cada fase será um arquivo de texto em `assets/levels/` (`fase1.txt`, `fase2.txt`, ...).
-Criar uma fase nova é criar um arquivo, sem escrever código novo.
+- **Entity**: qualquer objeto do mundo (jogador, bomba, monstro, parede).
+- **EntityType**: o "rótulo" da entidade, usado nas colisões e nas buscas.
+- **Component**: o comportamento grudado na entidade (`Player`, `Bomb`, `Monster`).
+- **Factory**: a "receita" de cada entidade, chamada com `spawn("nome", x, y)`.
+- **Variáveis do jogo**: valores globais (`geti("score")`, `inc("lives", -1)`). O HUD é ligado a elas e atualiza sozinho.
 
-Legenda sugerida:
+### Funções públicas da `Main` para o resto do grupo
 
-| Símbolo | Significado |
+| Função | Quem chama | Quando |
+|---|---|---|
+| `Main.onPlayerHit(player)` | Colisões | O jogador foi atingido: tira uma vida, reposiciona e dá invencibilidade |
+| `Main.killMonster(monster)` | Colisões | O monstro foi atingido: soma pontos e verifica a vitória |
+| `Main.setPlayerSpawn(x, y)` | `LevelLoader` | Ao carregar a fase, informa onde o jogador renasce |
+| `Main.levelComplete()` | Porta de saída | O jogador chegou à saída: abre a próxima fase |
+| `Main.gameOver()` | Regras do fluxo | Acabaram as vidas |
+
+### Regras para criar novas entidades
+
+1. Acrescente o tipo no **fim** do `EntityType` (para não bagunçar o código dos outros).
+2. Crie o `@Spawns("nome")` na `BombermanFactory`, dentro do bloco da sua área.
+3. Para a entidade participar de colisões, ela precisa de **hitbox** (`bbox` ou `viewWithBBox`) e de `.collidable()`.
+4. Todas as posições devem estar **alinhadas à grade** (múltiplos de `Config.TILE`).
+
+## Divisão do trabalho
+
+| Integrante | Responsabilidade |
 |---|---|
-| `#` | Parede fixa |
-| `*` | Tijolo destrutível |
-| `.` | Espaço vazio |
-| `P` | Posição inicial do jogador |
-| `E` | Inimigo |
+| Raquel | Jogador, bomba e explosão |
+| Leticia | Mapa, `LevelLoader`, paredes, tijolos e power-ups |
+| Julia | Inimigos, UI (menu, HUD, game over, vitória) e fluxo do jogo |
 
-## Divisão de tarefas
+## Fluxo de trabalho com Git
 
-### Raquel (jogador e bombas)
+1. Antes de começar: `git pull` na `main`.
+2. Crie uma branch para a sua tarefa:
 
-- Arquivos: `Player.java`, `Bomb.java`, `Explosion.java`
-- Input do teclado e movimento em grid
-- Colocar bomba e propagar a explosão em cruz
-- Colisão: jogador × parede/bomba
-- Assets: `Bomber1.png`, `Bomb.png`
+   ```bash
+   git checkout -b feature/nome-da-tarefa
+   ```
 
-### Leticia (mundo e itens)
+3. Faça commits pequenos, um por passo que funciona:
 
-- Arquivos: `Wall.java`, `Upgrade.java`, `LevelLoader.java`, mapas em `assets/levels/`
-- Carregamento das fases e grid do mapa
-- Tijolos que quebram e power-ups que aparecem ao quebrá-los
-- Porta de saída
-- Colisões: explosão × tijolo, jogador × power-up
-- Assets: `HardWall.png`, `SoftWall.png`, `PowerFireUp.png`
+   ```bash
+   git add .
+   git commit -m "monstro anda pela grade"
+   ```
 
-### Julia (inimigos, UI e fluxo)
+4. Envie a branch e abra um Pull Request:
 
-- Arquivos: `Monster.java`, `Menu.java` e novos arquivos em `ui/` (HUD, game over, vitória)
-- IA dos inimigos
-- Menu, HUD, vidas, pontuação, game over e vitória
-- Áudio (música e efeitos)
-- Colisões: jogador × inimigo, explosão × inimigo
-- Assets: `bomberman.png`, `icon.png`, sons e músicas
+   ```bash
+   git push -u origin feature/nome-da-tarefa
+   ```
 
-### Dependências entre as áreas
+5. Peça a revisão de alguém do grupo antes de fazer o merge.
 
-- Raquel deve entregar cedo uma entidade `EXPLOSION` simples (mesmo sem animação), pois B (tijolos) e C (inimigos) reagem a ela.
-- Julia precisa do grid criado por pela Leticia para saber onde há paredes. Enquanto isso, testar o monstro em um mapa vazio.
+Dicas para evitar conflitos:
 
-## Arquivos compartilhados (cuidado com conflitos)
+- A `Main.java` e a `BombermanFactory.java` são **compartilhadas**. Mexa só no bloco da sua área, marcado com o seu nome.
+- Rode `git pull` com frequência e nunca faça commit de `target/`.
 
-Estes arquivos são editados pelas três pessoas:
+## Pendências
 
-- **`BombermanFactory.java`**: adicionar os `@Spawns` em um bloco próprio, com comentário de seção (ex.: `// ===== Raquel: jogador e bomba =====`). Commits pequenos e frequentes.
-- **`EntityType.java`**: apenas acrescentar valores no fim do enum e avisar o grupo.
-- **`Main.java`**: apenas adicionar chamadas a métodos da própria área.
-- **`Config.java`**: apenas acrescentar constantes, sem alterar as que outras pessoas usam.
+- [x] Jogador com movimento e bloqueio por obstáculos
+- [x] Bomba com pavio e explosão em cruz
+- [x] Monstros com movimento pela grade
+- [x] HUD, menu principal, game over e vitória
+- [x] Vidas, invencibilidade e troca de fase
+- [ ] `LevelLoader` lendo o mapa do Tiled (`levels/`)
+- [ ] Monstros nascendo a partir do mapa (remover os monstros de teste da `Main`)
+- [ ] Alinhar a grade do mapa (`.tmj`) com a `Config` (15x13 tiles de 64 px)
+- [ ] Porta de saída e tijolos destrutíveis
+- [ ] Power-ups (`Upgrade`)
+- [ ] Detonação em cadeia de bombas
+- [ ] Sprites e animações (jogador, bomba, monstro)
+- [ ] Música e efeitos sonoros (converter os arquivos para `.mp3` e `.wav`)
+- [ ] Segundo tipo de inimigo (que persegue o jogador)
+- [ ] Remover o código de teste (tecla `K`)
 
-## Fluxo de Git
+## Problemas comuns
 
-1. A branch `main` fica sempre funcionando (compila e abre o jogo).
-2. Cada funcionalidade em uma branch própria: `feature/bomba`, `feature/level-loader`, `feature/monstro`...
-3. Ao terminar, abrir um Pull Request para a `main`.
-4. Outra pessoa do grupo revisa antes do merge. Assim todas conhecem o código inteiro.
-5. Antes de começar algo novo: `git pull` na `main`.
+| Sintoma | Causa provável | Solução |
+|---|---|---|
+| `release version 21 not supported` | JDK antigo | Instalar JDK 21 ou superior |
+| `mvn` não é reconhecido | Maven fora do PATH | Instalar o Maven e reabrir o terminal |
+| Erro de classe principal não encontrada | `mainClassName` do `pom.xml` diferente da `Main` | Usar `com.grupito.bomberman.Main` |
+| Erro ao criar uma entidade com textura | Nome do arquivo diferente do usado em `texture("...")` | Conferir o nome (maiúsculas e extensão) em `assets/textures/` |
+| Monstro atravessa o jogador | Falta hitbox ou `.collidable()` | Conferir a entidade na `BombermanFactory` |
+| Muitos conflitos no `git pull` | Arquivos de `target/` versionados | `git rm -r --cached target` e conferir o `.gitignore` |
 
-## Fases do projeto
+## Equipe
 
-1. **Fundação (em grupo):** projeto rodando, janela abrindo, jogador andando, mapa fixo.
-2. **Mecânicas básicas (em paralelo):** bomba e explosão (A), mapa e tijolos (B), um monstro e HUD (C).
-3. **Integração:** conectar as colisões e o menu.
-4. **Polimento:** power-ups variados, várias fases, sons, animações e IA melhor.
-
-## Pendências conhecidas
-
-- Converter `music.ogg` para `.mp3`: o JavaFX Media não toca `.ogg`.
-- Substituir `BombAnimation.mp4` por um efeito `.wav` (em `sounds/`) e por uma spritesheet em PNG (em `textures/`).
+Projeto desenvolvido em grupo para a disciplina de PI.

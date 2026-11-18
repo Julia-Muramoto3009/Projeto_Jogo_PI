@@ -1,17 +1,21 @@
 package com.grupito.bomberman;
 
 import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
-import static com.almasb.fxgl.dsl.FXGL.texture;
 import com.almasb.fxgl.dsl.components.ExpireCleanComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.CollidableComponent;
+import com.almasb.fxgl.physics.BoundingShape;
+import com.almasb.fxgl.physics.HitBox;
 import com.grupito.bomberman.components.Bomb;
+import com.grupito.bomberman.components.Monster;
 import com.grupito.bomberman.components.Player;
 
+import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
@@ -21,7 +25,8 @@ public class BombermanFactory  implements EntityFactory {
     public Entity newPlayer(SpawnData data) {
         return entityBuilder(data)
                 .type(EntityType.PLAYER)
-                .viewWithBBox(texture("bomberman.png"))
+                .bbox(new HitBox(BoundingShape.box(48,64))) // hitbox menor que a célula
+                //.viewWithBBox(texture("bomberman.png"))
                 .with(new CollidableComponent(true))
                 .with(new Player())
                 .build();
@@ -49,4 +54,19 @@ public class BombermanFactory  implements EntityFactory {
                 .build();
     }
 
+    @Spawns("monster")
+    public Entity newMonster(SpawnData data) {
+        int t = Config.TILE;
+        // Hitbox menor que a célula: o jogador só morre ao encostar de verdade
+        HitBox hitBox = new HitBox(new Point2D(12, 12), BoundingShape.box(t - 24, t - 24));
+
+        return entityBuilder(data)
+                .type(EntityType.ENEMY)
+                .view(new Circle(t / 2.0, t / 2.0, t / 2.0 - 8, Color.CRIMSON))
+                .bbox(hitBox)
+                .collidable()
+                .zIndex(10)
+                .with(new Monster(Config.ENEMIES_SPEED))
+                .build();
+    }
 }
