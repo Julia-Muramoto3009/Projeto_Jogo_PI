@@ -1,8 +1,14 @@
 package com.grupito.bomberman;
 
-import static com.almasb.fxgl.dsl.FXGL.geti;
+import java.util.Map;
+
+import com.almasb.fxgl.app.GameApplication;
+import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.app.scene.FXGLMenu;
+import com.almasb.fxgl.app.scene.SceneFactory;
 import static com.almasb.fxgl.dsl.FXGL.getGameController;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
+import static com.almasb.fxgl.dsl.FXGL.geti;
 import static com.almasb.fxgl.dsl.FXGL.inc;
 import static com.almasb.fxgl.dsl.FXGL.onCollision;
 import static com.almasb.fxgl.dsl.FXGL.onCollisionBegin;
@@ -10,17 +16,10 @@ import static com.almasb.fxgl.dsl.FXGL.onKey;
 import static com.almasb.fxgl.dsl.FXGL.onKeyDown;
 import static com.almasb.fxgl.dsl.FXGL.runOnce;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
-
-import java.util.Map;
-
-import com.almasb.fxgl.app.GameApplication;
-import com.almasb.fxgl.app.GameSettings;
-import com.almasb.fxgl.app.scene.FXGLMenu;
-import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.entity.Entity;
+import com.grupito.bomberman.UI.Menu;
 import com.grupito.bomberman.components.Monster;
 import com.grupito.bomberman.components.Player;
-import com.grupito.bomberman.telas.Menu;
 
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
@@ -29,7 +28,7 @@ import javafx.util.Duration;
 public class Main extends GameApplication {
     private Entity player;
 
-    // 0. Fluxo do Jogo (Julia)
+    // 0. Fluxo do Jogo
     // Valores que sobrevivem ao startNewGame() (que recria as variáveis do jogo)
     private static boolean advancing = false;
     private static int level = 1;
@@ -59,7 +58,7 @@ public class Main extends GameApplication {
         });
     }
 
-    // 2. Variáveis do jogo (Julia)
+    // 2. Variáveis do jogo
     @Override
     protected void initGameVars(Map<String, Object> vars) {
         if (!advancing) { // jogo novo (menu ou depois de game over)
@@ -85,7 +84,7 @@ public class Main extends GameApplication {
         invincible = false;
         ending = false;
 
-        // TEMP (Julia): monstros de teste enquanto o LevelLoader não existe.
+        // TEMP: monstros de teste enquanto o LevelLoader não existe.
         // Quando a Leticia terminar, o LevelLoader cria os monstros com
         // spawn("monster", x, y)
         // e estas linhas são apagadas.
@@ -118,7 +117,7 @@ public class Main extends GameApplication {
             }
         });
 
-        // TEMP (Julia): K mata um monstro, para testar pontos e vitória sem precisar da
+        // TEMP: K mata um monstro, para testar pontos e vitória sem precisar da
         // bomba
         onKeyDown(KeyCode.K, "Matar monstro (teste)", () -> {
             for (Entity e : getGameWorld().getEntitiesByType(EntityType.ENEMY)) {
@@ -130,7 +129,7 @@ public class Main extends GameApplication {
         });
     }
 
-    // 5. Colisões (Julia)
+    // 5. Colisões
     @Override
     protected void initPhysics() {
         // Encostando no monstro: se não estiver invencível, perde vida
@@ -143,14 +142,14 @@ public class Main extends GameApplication {
         onCollisionBegin(EntityType.EXPLOSION, EntityType.ENEMY, (explosion, monster) -> killMonster(monster));
     }
 
-    // 6. Interface (Julia)
+    // 6. Interface
     @Override
     protected void initUI() {
         Menu.initHud();
     }
 
     // =====================================================================
-    // Regras do fluxo (Julia)
+    // Regras do fluxo 
     // Leticia: ao carregar a fase, chamar Main.setPlayerSpawn(x, y);
     // com porta de saída, chamar Main.levelComplete() ao jogador entrar nela.
     // =====================================================================
