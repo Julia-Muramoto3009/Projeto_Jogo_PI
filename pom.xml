@@ -10,10 +10,10 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- FXGL 21 precisa de Java 17+. O JDK 27 compila com release 21 sem problemas -->
-        <maven.compiler.release>21</maven.compiler.release>
+        <!-- Java 25 é a versão LTS alvo; FXGL 21 requer Java 17 ou superior. -->
+        <maven.compiler.release>25</maven.compiler.release>
         <fxgl.version>21.1</fxgl.version>
-        <mainClassName>bomberman.BombermanApp</mainClassName>
+        <mainClassName>com.grupito.bomberman.Main</mainClassName>
     </properties>
 
     <dependencies>

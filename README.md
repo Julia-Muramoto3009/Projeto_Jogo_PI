@@ -21,7 +21,7 @@ O jogador anda por um labirinto, coloca bombas para abrir caminho, derrota os mo
 
 | Item | Versão |
 |---|---|
-| Java (JDK) | 21 ou superior |
+| Java (JDK) | 25 (LTS) |
 | Maven | 3.9 ou superior |
 | FXGL | 21.1 |
 | IDE sugerida | VS Code (com Extension Pack for Java) |
@@ -35,7 +35,7 @@ O jogador anda por um labirinto, coloca bombas para abrir caminho, derrota os mo
    mvn -version
    ```
 
-   O `java -version` deve mostrar **21 ou superior**. Com um JDK mais antigo a compilação falha com `release version 21 not supported`.
+   O `java -version` deve mostrar **25**. Com um JDK mais antigo a compilação falha com `release version 25 not supported`.
 
 2. Clone o repositório e entre na pasta:
 
@@ -208,7 +208,7 @@ Dicas para evitar conflitos:
 
 | Sintoma | Causa provável | Solução |
 |---|---|---|
-| `release version 21 not supported` | JDK antigo | Instalar JDK 21 ou superior |
+| `release version 25 not supported` | JDK antigo | Instalar JDK 25 (LTS) |
 | `mvn` não é reconhecido | Maven fora do PATH | Instalar o Maven e reabrir o terminal |
 | Erro de classe principal não encontrada | `mainClassName` do `pom.xml` diferente da `Main` | Usar `com.grupito.bomberman.Main` |
 | Erro ao criar uma entidade com textura | Nome do arquivo diferente do usado em `texture("...")` | Conferir o nome (maiúsculas e extensão) em `assets/textures/` |

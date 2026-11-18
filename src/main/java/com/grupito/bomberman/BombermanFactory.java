@@ -36,7 +36,8 @@ public class BombermanFactory  implements EntityFactory {
     @Spawns("bomb")
     public Entity newBomb(SpawnData data) {
         // O alcance pode ser passado no spawn; se não for, usa o padrão
-        int range = data.hasKey("range") ? data.get("range") : Config.BOMB_RANGE;
+        Integer requestedRange = data.get("range");
+        int range = requestedRange != null ? requestedRange : Config.BOMB_RANGE;
 
         return entityBuilder(data)
                 .type(EntityType.BOMB)

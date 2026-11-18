@@ -1,14 +1,12 @@
-package com.grupito.bomberman.telas;
-
-import static com.almasb.fxgl.dsl.FXGL.addUINode;
-import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
-import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
-import static com.almasb.fxgl.dsl.FXGL.getDialogService;
-import static com.almasb.fxgl.dsl.FXGL.getGameController;
-import static com.almasb.fxgl.dsl.FXGL.getip;
+package com.grupito.bomberman.UI;
 
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
+import static com.almasb.fxgl.dsl.FXGL.addUINode;
+import static com.almasb.fxgl.dsl.FXGL.getDialogService;
+import static com.almasb.fxgl.dsl.FXGL.getGameController;
+import static com.almasb.fxgl.dsl.FXGL.getip;
+import com.grupito.bomberman.Config;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -56,27 +54,37 @@ public class Menu extends FXGLMenu {
     // ================= HUD =================
 
     /** Textos ligados (bind) às variáveis do jogo: atualizam sozinhos. */
-    public static void initHud() {
+        public static void initHud() {
+        int x0 = Config.MAP_X;                       // alinha com a borda do mapa
+        @SuppressWarnings("unused")
+        int baixoY = Config.HUD_TOP + Config.MAP_H;  // onde começa a faixa de baixo
+
+        // ----- faixa de cima: pontos, vidas, fase, inimigos -----
         Text score = label();
         score.textProperty().bind(getip("score").asString("PONTOS: %d"));
-
         Text lives = label();
         lives.textProperty().bind(getip("lives").asString("VIDAS: %d"));
-
         Text level = label();
         level.textProperty().bind(getip("level").asString("FASE: %d"));
-
         Text enemies = label();
         enemies.textProperty().bind(getip("enemies").asString("INIMIGOS: %d"));
 
-        addUINode(new HBox(32, score, lives, level, enemies), 20, 30);
+        HBox topo = new HBox(48, score, lives, level, enemies);
+        topo.setAlignment(Pos.CENTER_LEFT);
+        topo.setPrefHeight(Config.HUD_TOP);
+        addUINode(topo, x0, 0);
+
+        // ----- faixa de baixo: upgrades obtidos -----
+        Text titulo = label();
+        titulo.setText("UPGRADES:");
     }
 
-    private static Text label() {
-        Text t = new Text();
-        t.setFill(Color.WHITE);
-        t.setFont(Font.font("Arial", FontWeight.BOLD, 18));
-        return t;
+    public static Text label() {
+        Text text = new Text();
+        text.setFill(Color.WHITE);
+        text.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+
+        return text;
     }
 
     // ================= Game over, vitória e fim de fase =================
