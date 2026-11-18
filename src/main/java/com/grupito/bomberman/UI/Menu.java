@@ -69,11 +69,12 @@ public class Menu extends FXGLMenu {
         addUINode(new HBox(32, score, lives, level, enemies), 20, 30);
     }
 
-    private static Text label() {
-        Text t = new Text();
-        t.setFill(Color.WHITE);
-        t.setFont(Font.font("Arial", FontWeight.BOLD, 18));
-        return t;
+    public static Text label() {
+        Text text = new Text();
+        text.setFill(Color.WHITE);
+        text.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+
+        return text;
     }
 
     // ================= Game over, vitória e fim de fase =================

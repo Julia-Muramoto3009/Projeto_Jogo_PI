@@ -133,7 +133,7 @@ public class Main extends GameApplication {
     @Override
     protected void initPhysics() {
         // Encostando no monstro: se não estiver invencível, perde vida
-        onCollision(EntityType.PLAYER, EntityType.ENEMY, (p, monster) -> onPlayerHit(p));
+        onCollision(EntityType.PLAYER, EntityType.ENEMY, (p, monster) -> Main.onPlayerHit(p));
 
         // Explosão atingindo o jogador
         onCollisionBegin(EntityType.EXPLOSION, EntityType.PLAYER, (explosion, p) -> onPlayerHit(p));
