@@ -6,7 +6,9 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
+import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
 import static com.almasb.fxgl.dsl.FXGL.getGameController;
+import static com.almasb.fxgl.dsl.FXGL.getGameScene;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.geti;
 import static com.almasb.fxgl.dsl.FXGL.inc;
@@ -23,8 +25,8 @@ import com.grupito.bomberman.components.Player;
 
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-
 public class Main extends GameApplication {
     private Entity player;
 
@@ -46,6 +48,8 @@ public class Main extends GameApplication {
         settings.setHeight(832);
         settings.setTitle("Bomberman");
         settings.setVersion("0.1");
+        settings.setWidth(Config.WINDOW_W);
+        settings.setHeight(Config.WINDOW_H);
 
         // Menu principal e menu de pausa
         settings.setMainMenuEnabled(true);
@@ -80,6 +84,17 @@ public class Main extends GameApplication {
         getGameWorld().addEntityFactory(new BombermanFactory());
 
         player = spawn("player", 0, 0);
+
+        var vp = getGameScene().getViewport();
+        vp.setX(-Config.MAP_X);
+        vp.setY(-Config.HUD_TOP);
+        getGameScene().setBackgroundColor(Config.COLOR_BORDER);   // cor da borda (janela toda)
+
+        // TEMP: chão do mapa. Apagar quando o LevelLoader desenhar o Piso2.png
+        Rectangle chao = new Rectangle(Config.MAP_W, Config.MAP_H, Config.COLOR_FLOOR);
+        chao.setStroke(Config.COLOR_FRAME);
+        chao.setStrokeWidth(4);
+        entityBuilder().at(0, 0).view(chao).zIndex(-100).buildAndAttach();
 
         invincible = false;
         ending = false;
