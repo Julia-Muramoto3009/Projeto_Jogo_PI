@@ -47,7 +47,9 @@ public class BombermanFactory  implements EntityFactory {
     public Entity newExplosion(SpawnData data) {
         return entityBuilder(data)
                 .type(EntityType.EXPLOSION)
-                .viewWithBBox(new Rectangle(Config.TILE, Config.TILE, Color.ORANGE)) // placeholder
+                .bbox(new HitBox(new Point2D(2, 2), BoundingShape.box(Config.TILE - 4, Config.TILE - 4)))
+                .view(new Rectangle(Config.TILE, Config.TILE, Color.ORANGE))
+                //.viewWithBBox(new Rectangle(Config.TILE-10, Config.TILE-10, Color.ORANGE)) // placeholder
                 .with(new CollidableComponent(true))
                 .with(new ExpireCleanComponent(Duration.seconds(Config.EXPLOSION_DURATION)))
                 .build();
