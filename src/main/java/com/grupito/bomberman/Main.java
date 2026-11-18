@@ -27,7 +27,6 @@ import com.almasb.fxgl.entity.Entity;
 import com.grupito.bomberman.components.Monster;
 import com.grupito.bomberman.components.Player;
 import com.grupito.bomberman.fases.LevelLoader;
-import com.grupito.bomberman.telas.Menu;
 
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
