@@ -1,5 +1,6 @@
 package com.grupito.bomberman;
 
+import com.almasb.fxgl.dsl.FXGL;
 import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
 import com.almasb.fxgl.dsl.components.ExpireCleanComponent;
 import com.almasb.fxgl.entity.Entity;
@@ -34,14 +35,11 @@ public class BombermanFactory  implements EntityFactory {
 
     @Spawns("bomb")
     public Entity newBomb(SpawnData data) {
-        // O alcance pode ser passado no spawn; se não for, usa o padrão
-        Integer requestedRange = data.get("range");
-        int range = requestedRange != null ? requestedRange : Config.BOMB_RANGE;
-
+        int range = data.hasKey("range") ? ((Number) data.get("range")).intValue() : Config.BOMB_RANGE;
         return entityBuilder(data)
                 .type(EntityType.BOMB)
                 .viewWithBBox(new Rectangle(Config.TILE, Config.TILE, Color.DARKRED)) // placeholder
-                .with(new CollidableComponent(true),new Bomb(range))
+                .with(new CollidableComponent(true), new Bomb(range))
                 .build();
     }
     
@@ -49,9 +47,47 @@ public class BombermanFactory  implements EntityFactory {
     public Entity newExplosion(SpawnData data) {
         return entityBuilder(data)
                 .type(EntityType.EXPLOSION)
-                .viewWithBBox(new Rectangle(Config.TILE, Config.TILE, Color.ORANGE)) // placeholder
+                .bbox(new HitBox(new Point2D(2, 2), BoundingShape.box(Config.TILE - 4, Config.TILE - 4)))
+                .view(new Rectangle(Config.TILE, Config.TILE, Color.ORANGE))
+                //.viewWithBBox(new Rectangle(Config.TILE-10, Config.TILE-10, Color.ORANGE)) // placeholder
                 .with(new CollidableComponent(true))
                 .with(new ExpireCleanComponent(Duration.seconds(Config.EXPLOSION_DURATION)))
+                .build();
+    }
+
+    @Spawns("wall")
+    public Entity newWall(SpawnData data) {
+        return FXGL.entityBuilder(data)
+                .type(EntityType.WALL)
+                .viewWithBBox(FXGL.texture("HardWall.png")) // Parede indestrutível
+                .collidable()
+                .build();
+    }
+
+    @Spawns("brick")
+    public Entity newBrick(SpawnData data) {
+        return FXGL.entityBuilder(data)
+                .type(EntityType.BRICK)
+                .viewWithBBox(FXGL.texture("SoftWall.png")) // Muro frágil destrutível
+                .collidable()
+                .zIndex(1)
+                .build();
+    }
+
+    @Spawns("floor") 
+    public Entity newFloor(SpawnData data) {
+        return FXGL.entityBuilder(data)
+                .type(EntityType.FLOOR)
+                .viewWithBBox(FXGL.texture("Piso3.png")) // Chão
+                .build();
+    }
+
+    @Spawns("powerup")
+    public Entity newPowerUp(SpawnData data) {
+        return FXGL.entityBuilder(data)
+                .type(EntityType.POWERUP)
+                .viewWithBBox(FXGL.texture("PowerUp.png"))
+                .collidable()
                 .build();
     }
 

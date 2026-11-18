@@ -6,9 +6,7 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
-import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
 import static com.almasb.fxgl.dsl.FXGL.getGameController;
-import static com.almasb.fxgl.dsl.FXGL.getGameScene;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.geti;
 import static com.almasb.fxgl.dsl.FXGL.inc;
@@ -22,11 +20,12 @@ import com.almasb.fxgl.entity.Entity;
 import com.grupito.bomberman.UI.Menu;
 import com.grupito.bomberman.components.Monster;
 import com.grupito.bomberman.components.Player;
+import com.grupito.bomberman.fases.LevelLoader;
 
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+
 public class Main extends GameApplication {
     private Entity player;
 
@@ -48,8 +47,6 @@ public class Main extends GameApplication {
         settings.setHeight(832);
         settings.setTitle("Bomberman");
         settings.setVersion("0.1");
-        settings.setWidth(Config.WINDOW_W);
-        settings.setHeight(Config.WINDOW_H);
 
         // Menu principal e menu de pausa
         settings.setMainMenuEnabled(true);
@@ -83,23 +80,12 @@ public class Main extends GameApplication {
     protected void initGame() {
         getGameWorld().addEntityFactory(new BombermanFactory());
 
-        player = spawn("player", 0, 0);
-
-        var vp = getGameScene().getViewport();
-        vp.setX(-Config.MAP_X);
-        vp.setY(-Config.HUD_TOP);
-        getGameScene().setBackgroundColor(Config.COLOR_BORDER);   // cor da borda (janela toda)
-
-        // TEMP: chão do mapa. Apagar quando o LevelLoader desenhar o Piso2.png
-        Rectangle chao = new Rectangle(Config.MAP_W, Config.MAP_H, Config.COLOR_FLOOR);
-        chao.setStroke(Config.COLOR_FRAME);
-        chao.setStrokeWidth(4);
-        entityBuilder().at(0, 0).view(chao).zIndex(-100).buildAndAttach();
+        player = LevelLoader.load(geti("level"));
 
         invincible = false;
         ending = false;
 
-        // TEMP: monstros de teste enquanto o LevelLoader não existe.
+        // TEMP (Julia): monstros de teste enquanto o LevelLoader não existe.
         // Quando a Leticia terminar, o LevelLoader cria os monstros com
         // spawn("monster", x, y)
         // e estas linhas são apagadas.
@@ -132,7 +118,7 @@ public class Main extends GameApplication {
             }
         });
 
-        // TEMP: K mata um monstro, para testar pontos e vitória sem precisar da
+        // TEMP (Julia): K mata um monstro, para testar pontos e vitória sem precisar da
         // bomba
         onKeyDown(KeyCode.K, "Matar monstro (teste)", () -> {
             for (Entity e : getGameWorld().getEntitiesByType(EntityType.ENEMY)) {
@@ -148,10 +134,13 @@ public class Main extends GameApplication {
     @Override
     protected void initPhysics() {
         // Encostando no monstro: se não estiver invencível, perde vida
-        onCollision(EntityType.PLAYER, EntityType.ENEMY, (p, monster) -> Main.onPlayerHit(p));
+        onCollision(EntityType.PLAYER, EntityType.ENEMY, (p, monster) -> onPlayerHit(p));
 
         // Explosão atingindo o jogador
         onCollisionBegin(EntityType.EXPLOSION, EntityType.PLAYER, (explosion, p) -> onPlayerHit(p));
+
+        // Explosão atingindo o a parede frágil (tijolo) 
+        onCollisionBegin(EntityType.EXPLOSION, EntityType.BRICK, (explosion, brick) -> getGameWorld().removeEntity(brick));
 
         // Explosão atingindo o monstro
         onCollisionBegin(EntityType.EXPLOSION, EntityType.ENEMY, (explosion, monster) -> killMonster(monster));
@@ -164,7 +153,7 @@ public class Main extends GameApplication {
     }
 
     // =====================================================================
-    // Regras do fluxo
+    // Regras do fluxo (Julia)
     // Leticia: ao carregar a fase, chamar Main.setPlayerSpawn(x, y);
     // com porta de saída, chamar Main.levelComplete() ao jogador entrar nela.
     // =====================================================================
