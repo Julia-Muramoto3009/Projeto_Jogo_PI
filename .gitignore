@@ -1,3 +1,4 @@
-target/
-system/
-logs/
+/target/
+/system/
+/logs/
+/.vscode/
