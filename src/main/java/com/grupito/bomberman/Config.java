@@ -21,4 +21,6 @@ public class Config {
     // Player
     public static final int PLAYER_LIVES = 3;
     public static final double INVINCIBLE_SECONDS = 2;
+    public static final int PLAYER_START_COL = 1;
+    public static final int PLAYER_START_ROW = 1;
 }
