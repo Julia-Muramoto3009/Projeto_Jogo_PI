@@ -1,7 +1,10 @@
 package com.grupito.bomberman;
 
+import java.util.List;
+
 import com.almasb.fxgl.dsl.FXGL;
 import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
+import static com.almasb.fxgl.dsl.FXGL.image;
 import com.almasb.fxgl.dsl.components.ExpireCleanComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
@@ -15,19 +18,21 @@ import com.grupito.bomberman.components.Monster;
 import com.grupito.bomberman.components.Player;
 
 import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 
 public class BombermanFactory  implements EntityFactory {
+    private static final List<String> FLAME_PARTS = List.of("left", "up", "center", "down", "right", "v", "h");
+
     @Spawns("player")
     public Entity newPlayer(SpawnData data) {
         return entityBuilder(data)
                 .type(EntityType.PLAYER)
-                .bbox(new HitBox(BoundingShape.box(48,64))) // hitbox menor que a célula
-                //.viewWithBBox(texture("bomberman.png"))
+                .bbox(new HitBox(BoundingShape.box(48,64)))
                 .with(new CollidableComponent(true))
                 .with(new Player())
                 .build();
@@ -38,18 +43,23 @@ public class BombermanFactory  implements EntityFactory {
         int range = data.hasKey("range") ? ((Number) data.get("range")).intValue() : Config.BOMB_RANGE;
         return entityBuilder(data)
                 .type(EntityType.BOMB)
-                .viewWithBBox(new Rectangle(Config.TILE, Config.TILE, Color.DARKRED)) // placeholder
+                .bbox(new HitBox(BoundingShape.box(Config.TILE, Config.TILE)))
                 .with(new CollidableComponent(true), new Bomb(range))
                 .build();
     }
-    
+
     @Spawns("explosion")
     public Entity newExplosion(SpawnData data) {
+        String part = data.get("part");
+        int i = FLAME_PARTS.indexOf(part);
+
+        ImageView view = new ImageView(image("Explosao_Sprite2.png"));
+        view.setViewport(new Rectangle2D(i % 3 * Config.TILE, i / 3 * Config.TILE, Config.TILE, Config.TILE));
+
         return entityBuilder(data)
                 .type(EntityType.EXPLOSION)
                 .bbox(new HitBox(new Point2D(2, 2), BoundingShape.box(Config.TILE - 4, Config.TILE - 4)))
-                .view(new Rectangle(Config.TILE, Config.TILE, Color.ORANGE))
-                //.viewWithBBox(new Rectangle(Config.TILE-10, Config.TILE-10, Color.ORANGE)) // placeholder
+                .view(view)
                 .with(new CollidableComponent(true))
                 .with(new ExpireCleanComponent(Duration.seconds(Config.EXPLOSION_DURATION)))
                 .build();
