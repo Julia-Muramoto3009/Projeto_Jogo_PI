@@ -10,7 +10,6 @@ import com.almasb.fxgl.texture.AnimationChannel;
 import com.grupito.bomberman.Config;
 import com.grupito.bomberman.EntityType;
 
-import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.util.Duration;
 
@@ -27,7 +26,12 @@ import javafx.util.Duration;
 public class Player extends Component {
 
     private static final double SPEED = 200;   // pixels por segundo
-    private static final double MARGIN = 8;    // folga da hitbox
+
+    // Corpo do personagem dentro do quadro 64x64 do sprite (medido no PNG)
+    private static final double BODY_X = 12;   // 12 até 52 na horizontal
+    private static final double BODY_Y = 13;    // topo: cabeça pode entrar um pouco
+    private static final double BODY_W = 40;
+    private static final double BODY_H = 50;   // 8 até 63: pé encostando
     private static final double IDLE_DELAY = 0.1;
     
     private int lives = Config.PLAYER_LIVES;
@@ -101,16 +105,14 @@ public class Player extends Component {
 
     /** Retângulo ocupado pelo jogador se ele estivesse em (x, y). */
     private Rectangle2D hitbox(double x, double y) {
-        return new Rectangle2D(
-                x + MARGIN, y + MARGIN,
-                entity.getWidth() - 2 * MARGIN, entity.getHeight() - 2 * MARGIN);
+        return new Rectangle2D(x + BODY_X, y + BODY_Y, BODY_W, BODY_H);
     }
 
     private boolean canMoveTo(double newX, double newY) {
         // Limites do mapa
-        if (newX < 0 || newY < 0
-                || newX + entity.getWidth() > Config.COLS * Config.TILE
-                || newY + entity.getHeight() > Config.ROWS * Config.TILE) {
+        if (newX + BODY_X < 0 || newY + BODY_Y < 0
+                || newX + BODY_X + BODY_W > Config.COLS * Config.TILE
+                || newY + BODY_Y + BODY_H > Config.ROWS * Config.TILE) {
             return false;
         }
 
@@ -136,7 +138,6 @@ public class Player extends Component {
 
     @Override
     public void onAdded() {
-        entity.getTransformComponent().setScaleOrigin(new Point2D(16, 21));
         entity.getViewComponent().addChild(texture);
     }
 
