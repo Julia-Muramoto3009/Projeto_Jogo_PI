@@ -18,7 +18,7 @@ import javafx.util.Duration;
 
 public class Explosion extends Component {
 
-    private static final String SPRITE_NAME = "Explosao_Sprite2.png"; // Renomeie o arquivo sem acento em assets/textures
+    private static final String SPRITE_NAME = "Explosao_Sprite.png"; // Renomeie o arquivo sem acento em assets/textures
     private static final int SPRITE_FRAMES = 4; // Ajuste para a quantidade de quadros da spritesheet
 
     private final int range;
