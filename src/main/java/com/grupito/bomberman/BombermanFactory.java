@@ -24,7 +24,7 @@ public class BombermanFactory  implements EntityFactory {
     public Entity newPlayer(SpawnData data) {
         return entityBuilder(data)
                 .type(EntityType.PLAYER)
-                .bbox(new HitBox(new Point2D(8, 0), BoundingShape.box(48, 64)))
+                .bbox(new HitBox(new Point2D(12, 13), BoundingShape.box(40, 50)))
                 .with(new CollidableComponent(true))
                 .with(new Player())
                 .build();
@@ -76,7 +76,7 @@ public class BombermanFactory  implements EntityFactory {
     public Entity newWall(SpawnData data) {
         return FXGL.entityBuilder(data)
                 .type(EntityType.WALL)
-                .viewWithBBox(FXGL.texture("HardWall.png")) // Parede indestrutível
+                .viewWithBBox(FXGL.texture("HardWall.png"))
                 .collidable()
                 .build();
     }

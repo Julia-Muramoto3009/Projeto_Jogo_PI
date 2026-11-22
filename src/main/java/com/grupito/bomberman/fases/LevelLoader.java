@@ -1,82 +1,52 @@
 package com.grupito.bomberman.fases;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-
-import com.almasb.fxgl.dsl.FXGL;
 import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
+import static com.almasb.fxgl.dsl.FXGL.setLevelFromMap;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
+import static com.almasb.fxgl.dsl.FXGL.texture;
 import com.almasb.fxgl.entity.Entity;
 import com.grupito.bomberman.Config;
 import com.grupito.bomberman.Main;
 
-/** 
- * Lê o mapa da fase (assents/levels/MapaN.tmj) e cria as entidades:
- * chão, blocos fixos, blocos destruíveis e o jogador.
- * chamada pela Main.initGame(): {@code player = LevelLoader.load(geti("level"));}
+/**
+ * Carrega a fase a partir de assets/levels/MapaN.tmx.
+ * O FXGL lê o .tmx e, para cada objeto do Tiled, chama o @Spawns da
+ * BombermanFactory com o mesmo nome do "type" do objeto (wall, brick, monster).
+ * Chamada pela Main.initGame(): player = LevelLoader.load(geti("level"));
  */
 public class LevelLoader {
-    private static final String FOLDER = "/assets/levels/";
-    private LevelLoader() {   // Construtor privado para evitar instanciação
+
+    private LevelLoader() {
     }
 
-    /** Carregar a fase e devolver o jogador já posicionado no ponto inicial. */
+    /** Carrega a fase e devolve o jogador já posicionado no ponto inicial. */
     public static Entity load(int level) {
-        MapData map = readMap(level);
-        map.warnings().forEach(w -> System.out.println("LevelLoader: " + w));
+        try {
+            setLevelFromMap("Mapa" + level + ".tmx");
+        } catch (Exception e) {
+            // Enquanto não existirem as 3 fases, reaproveita o Mapa1
+            System.err.println("[LevelLoader] Mapa" + level + ".tmx não carregou: " + e);
+            setLevelFromMap("Mapa1.tmx");
+        }
 
-        drawFloor(map);
-        int t = Config.TILE;
-        for (int[] c: map.walls()) {
-            spawn("wall", c[0] * t, c[1] * t);
-        }
-        for (int[] c: map.bricks()) {
-            spawn("brick", c[0] * t, c[1] * t);
-        }
-        double x = Config.PLAYER_START_COL * t;
-        double y = Config.PLAYER_START_ROW * t;
+        // O chão vem depois: setLevelFromMap limpa o mundo antes de criar as entidades
+        drawFloor();
+
+        double x = Config.PLAYER_START_COL * Config.TILE;
+        double y = Config.PLAYER_START_ROW * Config.TILE;
         Main.setPlayerSpawn(x, y);
         return spawn("player", x, y);
     }
 
-    private static MapData readMap(int level) {
-        String file = "Mapa" + level + ".tmj";
-        InputStream in = LevelLoader.class.getResourceAsStream(FOLDER + file);
-        if (in == null) {
-            // Enquanto só existe o Mapa1, as outras fases repraproveitam o mesmo mapa
-            System.err.println("[LevelLoader]" + file + " não encontrado, usando Mapa1.tmj");
-            in = LevelLoader.class.getResourceAsStream(FOLDER + "Mapa1.tmj");
-        }
-        if (in == null) {
-            throw new IllegalStateException("Mapa não encontrado em scr/main/resources" + FOLDER);
-        }
-        try {
-            return new MapData(new String(in.readAllBytes(), StandardCharsets.UTF_8), Config.TILE);
-        }
-        catch (IOException e) {
-            throw new IllegalStateException("Erro ao ler o mapa: " + file, e);
-        }
-        finally {
-            try {
-                in.close();
-            }
-            catch (IOException ignored) {
-            }
-        }
-    }
-    
-    /** TEMP: chão. Trocar pela textura Piso3.png quando os srites entrarem. */
-    private static void drawFloor(MapData map) {
-        int t = Config.TILE;
-        for (int row = 0; row < map.rows(); row++) {
-            for (int col = 0; col < map.cols(); col++) {
+    private static void drawFloor() {
+        for (int row = 0; row < Config.ROWS; row++) {
+            for (int col = 0; col < Config.COLS; col++) {
                 entityBuilder()
-                    .at(col * t, row * t)
-                    .view(FXGL.texture("Piso3.png")) // Chão
-                    .zIndex(-100)
-                    .buildAndAttach();
-                }
+                        .at(col * Config.TILE, row * Config.TILE)
+                        .view(texture("Piso3.png"))
+                        .zIndex(-100)
+                        .buildAndAttach();
             }
+        }
     }
 }

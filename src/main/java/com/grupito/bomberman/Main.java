@@ -6,6 +6,7 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
+import com.almasb.fxgl.audio.Music;
 import com.almasb.fxgl.dsl.FXGL;
 import static com.almasb.fxgl.dsl.FXGL.getGameController;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
@@ -31,6 +32,9 @@ import javafx.util.Duration;
 
 public class Main extends GameApplication {
     private Entity player;
+
+    // Música de fundo (static: sobrevive ao startNewGame() de cada fase)
+    private static Music musica = null;
 
     // 0. Fluxo do Jogo (Julia)
     // Valores que sobrevivem ao startNewGame() (que recria as variáveis do jogo)
@@ -94,10 +98,12 @@ public class Main extends GameApplication {
         // e estas linhas são apagadas.
         int t = Config.TILE;
         int n = Math.min(2 + geti("level"), 4);
-        int[][] cells = { { 13, 11 }, { 13, 1 }, { 1, 11 }, { 7, 5 } };
-        for (int i = 0; i < n; i++) {
-            spawn("monster", cells[i][0] * t, cells[i][1] * t);
-        }
+        // int[][] cells = { { 13, 11 }, { 13, 1 }, { 1, 11 }, { 7, 5 } };
+        // for (int i = 0; i < n; i++) {
+        //     spawn("monster", cells[i][0] * t, cells[i][1] * t);
+        // }
+
+        iniciarMusica();
     }
 
     // 4. Mapeamento de Entradas de Teclado (Controles)
@@ -127,6 +133,7 @@ public class Main extends GameApplication {
 
             if (!jaTemBomba) {
                 playerComp.incrementActiveBombs(); // Soma 1 nas bombas ativas do player
+                FXGL.play("place_freesound.wav");
                 
                 // Spawna a bomba passando corretamente o range e a referência do player
                 spawn("bomb", new SpawnData(x, y).put("range", playerComp.getExplosionRange()).put("player", player));
@@ -172,6 +179,7 @@ public class Main extends GameApplication {
 
             // Remove o tijolo do mapa de qualquer forma
             brick.removeFromWorld();
+            FXGL.play("brick_break_freesound.wav");
         });
 
         // Coleta de Power-Up pelo Jogador
@@ -198,6 +206,7 @@ public class Main extends GameApplication {
                 }
             }
 
+            FXGL.play("powerup_freesound.wav");
             powerUpEntity.removeFromWorld(); // Remove o power-up do mapa após ser pego
         });
     }
@@ -223,6 +232,7 @@ public class Main extends GameApplication {
             return;
 
         inc("lives", -1);
+        FXGL.play("hit_chisper.wav");
         if (geti("lives") <= 0) {
             gameOver();
             return;
@@ -245,6 +255,7 @@ public class Main extends GameApplication {
             return; // várias chamas podem atingir o mesmo monstro
 
         m.kill();
+        FXGL.play("monster_die.wav");
         inc("score", Config.SCORE_MONSTER);
         inc("enemies", -1);
 
@@ -259,6 +270,8 @@ public class Main extends GameApplication {
         ending = true;
 
         if (geti("level") >= Config.TOTAL_LEVELS) {
+            pararMusica();
+            FXGL.play("win_freesound.wav");
             Menu.showVictory(geti("score"));
             return;
         }
@@ -280,7 +293,27 @@ public class Main extends GameApplication {
         if (ending)
             return;
         ending = true;
+        pararMusica();
+        FXGL.play("game_over_alhpix.wav");
         Menu.showGameOver(geti("score"));
+    }
+
+    // =====================================================================
+    // Áudio (Raquel)
+    // =====================================================================
+
+    public static void iniciarMusica() {
+        if (musica == null) {
+            musica = FXGL.getAssetLoader().loadMusic("musica.mp3");
+            FXGL.getAudioPlayer().loopMusic(musica);
+        }
+    }
+
+    public static void pararMusica() {
+        if (musica != null) {
+            FXGL.getAudioPlayer().stopMusic(musica);
+            musica = null;
+        }
     }
 
     public static void main(String[] args) {

@@ -12,11 +12,10 @@ import com.grupito.bomberman.EntityType;
 import com.grupito.bomberman.Main;
 
 import javafx.geometry.Rectangle2D;
-import javafx.scene.image.Image;
 
 public class Bomb extends Component {
 
-    private static final String EXPLOSION_SPRITE = "Explosao_Sprite.png";
+    private static final String EXPLOSION_SPRITE = "Explosao_Sprite2.png";
 
     // Direções: Cima, Baixo, Esquerda, Direita
     private static final int[][] DIRECTIONS = {
@@ -79,6 +78,7 @@ private void snapEntityToGrid() {
     }
 
     private void explode() {
+        FXGL.play("explosao_lumora.wav");
         exploded = true;
 
         // Decrementa a quantidade de bombas ativas do jogador que a soltou (se ele ainda existir)
@@ -119,18 +119,21 @@ private void snapEntityToGrid() {
 
                 int nextCol = targetCol + dir[0];
                 int nextRow = targetRow + dir[1];
+
+                boolean temTijolo = hasEntityOfType(targetCol, targetRow, EntityType.BRICK);
+
                 boolean isTip = (step == range)
+                        || temTijolo
                         || !isInsideGrid(nextCol, nextRow)
                         || hasEntityOfType(nextCol, nextRow, EntityType.WALL);
 
                 int spriteIndex = getFlameSpriteIndex(dirIndex, isTip);
                 spawnFlame(targetCol, targetRow, spriteIndex);
-                
-                // Mata o monstro instantaneamente neste tile da explosão
+
                 checkAndKillMonsterAt(targetCol, targetRow);
 
-                // Tijolo destrutível é atingido pela chama, mas bloqueia a continuidade além dele
-                if (hasEntityOfType(targetCol, targetRow, EntityType.BRICK)) {
+                // Tijolo: a chama entra nele, mas não passa dele
+                if (temTijolo) {
                     break;
                 }
             }
@@ -184,28 +187,13 @@ private void spawnFlame(int col, int row, int spriteIndex) {
     }
 
     private Texture getExplosionPiece(int index) {
-        Image sheet = FXGL.image(EXPLOSION_SPRITE);
-        double tileW = sheet.getWidth() / 3.0;
-        double tileH = sheet.getHeight() / 3.0;
-
         int col = index % 3;
         int row = index / 3;
 
-        // Apara levemente as bordas de cada célula para aproximar os segmentos da cruz
-        double padX = tileW * 0.04;
-        double padY = tileH * 0.04;
+        Rectangle2D viewport = new Rectangle2D(
+                col * Config.TILE, row * Config.TILE, Config.TILE, Config.TILE);
 
-        double cropX = Math.max(0, col * tileW + padX);
-        double cropY = Math.max(0, row * tileH + padY);
-        double cropW = Math.max(1, tileW - padX * 2);
-        double cropH = Math.max(1, tileH - padY * 2);
-
-        Rectangle2D viewport = new Rectangle2D(cropX, cropY, cropW, cropH);
-        Texture tex = new Texture(sheet).subTexture(viewport);
-        tex.setFitWidth(Config.TILE);
-        tex.setFitHeight(Config.TILE);
-
-        return tex;
+        return new Texture(FXGL.image(EXPLOSION_SPRITE)).subTexture(viewport);
     }
 
 private boolean hasEntityOfType(int col, int row, EntityType type) {
