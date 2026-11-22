@@ -16,6 +16,7 @@ O jogador anda por um labirinto, coloca bombas para abrir caminho, derrota os mo
 - [Fluxo de trabalho com Git](#fluxo-de-trabalho-com-git)
 - [Pendências](#pendências)
 - [Problemas comuns](#problemas-comuns)
+- [Referências](#referências)
 
 ## Tecnologias
 
@@ -216,5 +217,30 @@ Dicas para evitar conflitos:
 | Muitos conflitos no `git pull` | Arquivos de `target/` versionados | `git rm -r --cached target` e conferir o `.gitignore` |
 
 ## Equipe
+
+
+## Referências
+ 
+### Áudio
+ 
+Sons baixados do [Pixabay](https://pixabay.com/sound-effects/) (licença de uso gratuito):
+ 
+- `brick_break_freesound.wav`: freesound
+- `explosao_lumora.wav`: lumora
+- `game_over_alphix.wav`: alphix
+- `hit_chisper.wav`: chisper
+- `place_freesound.wav`: freesound
+- `powerup_freesound.wav`: freesound
+- `win_freesound.wav`: freesound
+
+Sons criados para o projeto, com o script `tools/gerar_audio.py` e auxílio do Claude (Anthropic):
+- `monster_die.wav`
+
+### Documentação
+ 
+- [FXGL](https://github.com/AlmasB/FXGL)
+- [JavaFX Media](https://openjfx.io/javadoc/23/javafx.media/javafx/scene/media/package-summary.html)
+- [Licença do Pixabay](https://pixabay.com/service/license-summary/)
+ 
 
 Projeto desenvolvido em grupo para a disciplina de PI.

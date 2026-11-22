@@ -16,7 +16,7 @@ import javafx.scene.image.Image;
 
 public class Bomb extends Component {
 
-    private static final String EXPLOSION_SPRITE = "Explosao_Sprite.png";
+    private static final String EXPLOSION_SPRITE = "Explosao_Sprite2.png";
 
     // Direções: Cima, Baixo, Esquerda, Direita
     private static final int[][] DIRECTIONS = {
@@ -79,6 +79,7 @@ private void snapEntityToGrid() {
     }
 
     private void explode() {
+        FXGL.play("explosao_lumora.wav");
         exploded = true;
 
         // Decrementa a quantidade de bombas ativas do jogador que a soltou (se ele ainda existir)
