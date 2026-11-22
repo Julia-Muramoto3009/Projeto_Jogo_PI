@@ -29,6 +29,25 @@ public class Player extends Component {
     private static final double SPEED = 200;   // pixels por segundo
     private static final double MARGIN = 8;    // folga da hitbox
     private static final double IDLE_DELAY = 0.1;
+    
+    private int lives = Config.PLAYER_LIVES;
+    private int maxBombs = 1;         // Limite inicial de bombas simultâneas
+    private int activeBombs = 0;      // Quantas bombas o jogador colocou e ainda estão ativas no mapa
+    private int explosionRange = Config.BOMB_RANGE; // Alcance atual da explosão
+
+    // Getters e Setters para os Upgrades
+    public int getLives() { return lives; }
+    public void addLife() { if (lives < 5) lives++; }
+
+    public int getMaxBombs() { return maxBombs; }
+    public void increaseMaxBombs() { maxBombs++; }
+
+    public int getActiveBombs() { return activeBombs; }
+    public void incrementActiveBombs() { activeBombs++; }
+    public void decrementActiveBombs() { activeBombs = Math.max(0, activeBombs - 1); }
+
+    public int getExplosionRange() { return explosionRange; }
+    public void increaseExplosionRange() { explosionRange++; }
 
     private final AnimatedTexture texture;
     private final AnimationChannel animIdle, animWalk_W, animWalk_A, animWalk_S, animWalk_D;
@@ -55,9 +74,7 @@ public class Player extends Component {
         }
     }
 
-    /**
-     Limitação do movimento do personagem
-     */
+    //Limitação do movimento do personagem
     private void move(double dx, double dy, AnimationChannel animation) {
         timeWithoutMovement = 0;
         boolean moved = false;
