@@ -6,7 +6,7 @@ public class Config {
     // Bombas
     public static final double BOMB_FUSE_SECONDS = 2.5;      // tempo até a bomba explodir
     public static final double EXPLOSION_DURATION = 0.5;     // tempo que a chama fica na tela
-    public static final int BOMB_RANGE = 2;                  // alcance inicial (em tiles)
+    public static final int BOMB_RANGE = 1;                  // alcance inicial (em tiles)
 
     // Mundo 
     public static final int TILE = 64;
@@ -41,4 +41,11 @@ public class Config {
     public static final double INVINCIBLE_SECONDS = 2;
     public static final int PLAYER_START_COL = 1;
     public static final int PLAYER_START_ROW = 1;
+
+    // Upgrades
+    public enum PowerUpType {
+    HEART,   // Ganha 1 vida
+    BOMB,    // Aumenta o limite de bombas simultâneas
+    FIRE     // Aumenta o alcance da explosão
+}
 }

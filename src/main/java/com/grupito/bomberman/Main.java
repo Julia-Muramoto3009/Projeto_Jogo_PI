@@ -6,6 +6,7 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
+import com.almasb.fxgl.dsl.FXGL;
 import static com.almasb.fxgl.dsl.FXGL.getGameController;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.geti;
@@ -17,6 +18,8 @@ import static com.almasb.fxgl.dsl.FXGL.onKeyDown;
 import static com.almasb.fxgl.dsl.FXGL.runOnce;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
+import com.grupito.bomberman.Config.PowerUpType;
 import com.grupito.bomberman.UI.Menu;
 import com.grupito.bomberman.components.Monster;
 import com.grupito.bomberman.components.Player;
@@ -105,6 +108,15 @@ public class Main extends GameApplication {
         onKey(KeyCode.W, "Cima", () -> player.getComponent(Player.class).moveUp());
         onKey(KeyCode.S, "Baixo", () -> player.getComponent(Player.class).moveDown());
         onKeyDown(KeyCode.SPACE, "Colocar bomba", () -> {
+            if (player == null || !player.isActive()) return;
+            
+            Player playerComp = player.getComponent(Player.class);
+
+            // Verifica se o jogador atingiu o limite de bombas ativas
+            if (playerComp.getActiveBombs() >= playerComp.getMaxBombs()) {
+                return; 
+            }
+
             int tileX = (int) (player.getCenter().getX() / Config.TILE);
             int tileY = (int) (player.getCenter().getY() / Config.TILE);
             double x = tileX * Config.TILE;
@@ -114,7 +126,10 @@ public class Main extends GameApplication {
                     .anyMatch(b -> b.getX() == x && b.getY() == y);
 
             if (!jaTemBomba) {
-                spawn("bomb", x, y);
+                playerComp.incrementActiveBombs(); // Soma 1 nas bombas ativas do player
+                
+                // Spawna a bomba passando corretamente o range e a referência do player
+                spawn("bomb", new SpawnData(x, y).put("range", playerComp.getExplosionRange()).put("player", player));
             }
         });
 
@@ -134,16 +149,57 @@ public class Main extends GameApplication {
     @Override
     protected void initPhysics() {
         // Encostando no monstro: se não estiver invencível, perde vida
-        onCollision(EntityType.PLAYER, EntityType.ENEMY, (p, monster) -> onPlayerHit(p));
+        onCollision(EntityType.PLAYER, EntityType.ENEMY, (p, monster) -> {monster.getComponent(Monster.class).playAttackAnimation();onPlayerHit(p);});
 
         // Explosão atingindo o jogador
         onCollisionBegin(EntityType.EXPLOSION, EntityType.PLAYER, (explosion, p) -> onPlayerHit(p));
 
-        // Explosão atingindo o a parede frágil (tijolo) 
-        onCollisionBegin(EntityType.EXPLOSION, EntityType.BRICK, (explosion, brick) -> getGameWorld().removeEntity(brick));
+        // Explosão atingindo o tijolo (BRICK): Destroi e tem chance de dropar power-up
+        onCollisionBegin(EntityType.EXPLOSION, EntityType.BRICK, (explosion, brick) -> {
+            
+        // Define a probabilidade de drop (Exemplo: 40% de chance de nascer upgrade)
+        double chanceDeDrop = 0.4; // 0.4 = 40% | Mude para 0.3 se quiser 30%, etc.
+            
+            if (FXGL.random() < chanceDeDrop) {
+                // Sorteia aleatoriamente qual tipo de power-up vai nascer
+                PowerUpType[] types = PowerUpType.values();
+                PowerUpType randomType = types[FXGL.random(0, types.length - 1)];
+                
+                // Spawna o power-up na posição do tijolo
+                spawn("powerup", new SpawnData(brick.getPosition().getX(), brick.getPosition().getY())
+                        .put("type", randomType));
+            }
 
-        // Explosão atingindo o monstro
-        onCollisionBegin(EntityType.EXPLOSION, EntityType.ENEMY, (explosion, monster) -> killMonster(monster));
+            // Remove o tijolo do mapa de qualquer forma
+            brick.removeFromWorld();
+        });
+
+        // Coleta de Power-Up pelo Jogador
+        onCollision(EntityType.PLAYER, EntityType.POWERUP, (playerEntity, powerUpEntity) -> {
+            Player playerComp = playerEntity.getComponent(Player.class);
+            PowerUpType type = powerUpEntity.getObject("powerUpType");
+
+            if (type != null) {
+                switch (type) {
+                    case HEART -> {
+                        playerComp.addLife();
+                        // INCREMENTA A VIDA GLOBAL NO FXGL PARA ATUALIZAR O HUD
+                        inc("lives", 1);
+                        FXGL.getNotificationService().pushNotification("Vida Extra Coletada! ❤️");
+                    }
+                    case BOMB -> {
+                        playerComp.increaseMaxBombs();
+                        FXGL.getNotificationService().pushNotification("Bomba Simultânea Extra! 💣");
+                    }
+                    case FIRE -> {
+                        playerComp.increaseExplosionRange();
+                        FXGL.getNotificationService().pushNotification("Alcance da Explosão Aumentado! 🔥");
+                    }
+                }
+            }
+
+            powerUpEntity.removeFromWorld(); // Remove o power-up do mapa após ser pego
+        });
     }
 
     // 6. Interface (Julia)
@@ -172,8 +228,8 @@ public class Main extends GameApplication {
             return;
         }
 
-        // volta ao ponto inicial e fica invencível por alguns segundos
-        hitPlayer.setPosition(playerSpawn);
+        // NÃO move mais para o spawn. O jogador continua no mesmo lugar,
+        // mas fica invencível e piscando (com opacidade reduzida) por alguns segundos.
         invincible = true;
         hitPlayer.getViewComponent().setOpacity(0.4);
 
