@@ -76,7 +76,7 @@ public class BombermanFactory  implements EntityFactory {
     public Entity newWall(SpawnData data) {
         return FXGL.entityBuilder(data)
                 .type(EntityType.WALL)
-                .viewWithBBox(FXGL.texture("HardWall.png")) // Parede indestrutível
+                .viewWithBBox(FXGL.texture("HardWall.png"))
                 .collidable()
                 .build();
     }

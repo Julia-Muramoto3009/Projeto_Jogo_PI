@@ -98,10 +98,10 @@ public class Main extends GameApplication {
         // e estas linhas são apagadas.
         int t = Config.TILE;
         int n = Math.min(2 + geti("level"), 4);
-        int[][] cells = { { 13, 11 }, { 13, 1 }, { 1, 11 }, { 7, 5 } };
-        for (int i = 0; i < n; i++) {
-            spawn("monster", cells[i][0] * t, cells[i][1] * t);
-        }
+        // int[][] cells = { { 13, 11 }, { 13, 1 }, { 1, 11 }, { 7, 5 } };
+        // for (int i = 0; i < n; i++) {
+        //     spawn("monster", cells[i][0] * t, cells[i][1] * t);
+        // }
 
         iniciarMusica();
     }
