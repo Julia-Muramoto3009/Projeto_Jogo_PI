@@ -123,8 +123,8 @@ Para criar uma fase nova, salve um dos mapas como `MapaN.tmx` e ajuste `Config.T
 
 | Integrante | Responsabilidade |
 |---|---|
-| Raquel | Jogador, bomba, explosão, upgrades, animação da bomba, sons e música |
-| Leticia | Mapas no Tiled, `LevelLoader`, paredes, tijolos e sprites |
+| Raquel |  Mapas no Tiled, Jogador, bomba e explosão,  animação da bomba, sons e música |
+| Leticia | `LevelLoader`, paredes, upgrades, tijolos e sprites |
 | Julia | Monstros, UI (menu, HUD, game over, vitória) e fluxo do jogo |
 
 ## Problemas comuns
