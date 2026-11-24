@@ -17,7 +17,7 @@ Requisitos:
 
 O FXGL (21.1) e o JavaFX são baixados pelo Maven na primeira execução (precisa de internet).
 
-```bash
+```
 java -version          # deve mostrar 25
 mvn -version
 
@@ -124,7 +124,7 @@ Para criar uma fase nova, salve um dos mapas como `MapaN.tmx` e ajuste `Config.T
 | Integrante | Responsabilidade |
 |---|---|
 | Raquel |  Mapas no Tiled, Jogador, bomba e explosão,  animação da bomba, sons e música |
-| Leticia | `LevelLoader`, paredes, upgrades, tijolos e sprites |
+| Leticia | LevelLoader, paredes, upgrades, tijolos e sprites |
 | Julia | Monstros, UI (menu, HUD, game over, vitória) e fluxo do jogo |
 
 ## Problemas comuns
@@ -133,8 +133,8 @@ Para criar uma fase nova, salve um dos mapas como `MapaN.tmx` e ajuste `Config.T
 |---|---|
 | `release version 25 not supported` | Instalar o JDK 25 |
 | `mvn` não é reconhecido | Instalar o Maven e reabrir o terminal |
-| Erro de textura ou som não encontrado | Conferir o nome do arquivo (maiúsculas e extensão) em `assets/` |
-| Aviso `TiledMap generated from 1.12.2. Supported version: 1.9.0` | Pode ser ignorado, os mapas carregam normalmente |
+
+
 
 ## Referências
 
