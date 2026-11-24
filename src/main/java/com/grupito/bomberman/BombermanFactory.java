@@ -65,8 +65,6 @@ public class BombermanFactory  implements EntityFactory {
         return entityBuilder(data)
                 .type(EntityType.EXPLOSION)
                 .bbox(new HitBox(new Point2D(2, 2), BoundingShape.box(Config.TILE - 4, Config.TILE - 4)))
-                //.view(new Rectangle(Config.TILE, Config.TILE, Color.ORANGE))
-                //.viewWithBBox(new Rectangle(Config.TILE-10, Config.TILE-10, Color.ORANGE)) // placeholder
                 .with(new CollidableComponent(true))
                 .with(new ExpireCleanComponent(Duration.seconds(Config.EXPLOSION_DURATION)))
                 .build();
@@ -88,14 +86,6 @@ public class BombermanFactory  implements EntityFactory {
                 .viewWithBBox(FXGL.texture("SoftWall.png")) // Muro frágil destrutível
                 .collidable()
                 .zIndex(1)
-                .build();
-    }
-
-    @Spawns("floor") 
-    public Entity newFloor(SpawnData data) {
-        return FXGL.entityBuilder(data)
-                .type(EntityType.FLOOR)
-                .viewWithBBox(FXGL.texture("Piso3.png")) // Chão
                 .build();
     }
 
