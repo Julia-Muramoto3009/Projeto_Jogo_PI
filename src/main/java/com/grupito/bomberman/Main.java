@@ -66,7 +66,7 @@ public class Main extends GameApplication {
         });
     }
 
-    // 2. Variáveis do jogo (Julia)
+    // 2. Variáveis do jogo
     @Override
     protected void initGameVars(Map<String, Object> vars) {
         if (!advancing) { // jogo novo (menu ou depois de game over)
@@ -129,7 +129,7 @@ public class Main extends GameApplication {
             }
         });
 
-        // TEMP (Julia): K mata um monstro, para testar pontos e vitória sem precisar da
+        // K mata um monstro, para testar pontos e vitória sem precisar da
         // bomba
         onKeyDown(KeyCode.K, "Matar monstro (teste)", () -> {
             for (Entity e : getGameWorld().getEntitiesByType(EntityType.ENEMY)) {
@@ -141,7 +141,7 @@ public class Main extends GameApplication {
         });
     }
 
-    // 5. Colisões (Julia)
+    // 5. Colisões 
     @Override
     protected void initPhysics() {
         // Encostando no monstro: se não estiver invencível, perde vida
@@ -200,16 +200,14 @@ public class Main extends GameApplication {
         });
     }
 
-    // 6. Interface (Julia)
+    // 6. Interface 
     @Override
     protected void initUI() {
         Menu.initHud();
     }
 
     // =====================================================================
-    // Regras do fluxo (Julia)
-    // Leticia: ao carregar a fase, chamar Main.setPlayerSpawn(x, y);
-    // com porta de saída, chamar Main.levelComplete() ao jogador entrar nela.
+    // Regras do fluxo 
     // =====================================================================
 
     public static void setPlayerSpawn(double x, double y) {
@@ -288,7 +286,7 @@ public class Main extends GameApplication {
     }
 
     // =====================================================================
-    // Áudio (Raquel)
+    // Áudio 
     // =====================================================================
 
     public static void iniciarMusica() {
