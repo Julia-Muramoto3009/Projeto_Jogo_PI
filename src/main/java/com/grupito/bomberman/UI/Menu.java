@@ -56,8 +56,6 @@ public class Menu extends FXGLMenu {
     /** Textos ligados (bind) às variáveis do jogo: atualizam sozinhos. */
         public static void initHud() {
         int x0 = Config.MAP_X;                       // alinha com a borda do mapa
-        @SuppressWarnings("unused")
-        int baixoY = Config.HUD_TOP + Config.MAP_H;  // onde começa a faixa de baixo
 
         // ----- faixa de cima: pontos, vidas, fase, inimigos -----
         Text score = label();
@@ -73,10 +71,6 @@ public class Menu extends FXGLMenu {
         topo.setAlignment(Pos.CENTER_LEFT);
         topo.setPrefHeight(Config.HUD_TOP);
         addUINode(topo, x0, 0);
-
-        // ----- faixa de baixo: upgrades obtidos -----
-        Text titulo = label();
-        titulo.setText("UPGRADES:");
     }
 
     public static Text label() {

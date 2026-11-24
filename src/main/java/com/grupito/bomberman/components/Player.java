@@ -40,7 +40,6 @@ public class Player extends Component {
     private int explosionRange = Config.BOMB_RANGE; // Alcance atual da explosão
 
     // Getters e Setters para os Upgrades
-    public int getLives() { return lives; }
     public void addLife() { if (lives < 5) lives++; }
 
     public int getMaxBombs() { return maxBombs; }

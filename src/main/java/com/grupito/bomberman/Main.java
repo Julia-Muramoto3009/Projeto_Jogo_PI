@@ -92,17 +92,6 @@ public class Main extends GameApplication {
         invincible = false;
         ending = false;
 
-        // TEMP (Julia): monstros de teste enquanto o LevelLoader não existe.
-        // Quando a Leticia terminar, o LevelLoader cria os monstros com
-        // spawn("monster", x, y)
-        // e estas linhas são apagadas.
-        int t = Config.TILE;
-        int n = Math.min(2 + geti("level"), 4);
-        // int[][] cells = { { 13, 11 }, { 13, 1 }, { 1, 11 }, { 7, 5 } };
-        // for (int i = 0; i < n; i++) {
-        //     spawn("monster", cells[i][0] * t, cells[i][1] * t);
-        // }
-
         iniciarMusica();
     }
 
@@ -294,7 +283,7 @@ public class Main extends GameApplication {
             return;
         ending = true;
         pararMusica();
-        FXGL.play("game_over_alhpix.wav");
+        FXGL.play("game_over_alphix.wav");
         Menu.showGameOver(geti("score"));
     }
 

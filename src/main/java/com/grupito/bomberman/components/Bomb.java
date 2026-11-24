@@ -15,7 +15,7 @@ import javafx.geometry.Rectangle2D;
 
 public class Bomb extends Component {
 
-    private static final String EXPLOSION_SPRITE = "Explosao_Sprite2.png";
+    private static final String EXPLOSION_SPRITE = "Explosao_Sprite.png";
 
     // Direções: Cima, Baixo, Esquerda, Direita
     private static final int[][] DIRECTIONS = {
