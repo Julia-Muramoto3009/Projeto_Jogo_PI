@@ -13,7 +13,7 @@ public class Config {
     public static final int COLS = 15;
     public static final int ROWS = 13;
     
-    // ===== janela e HUD =====
+// ===== janela e HUD =====
     public static final int WINDOW_W = 1040;
     public static final int WINDOW_H = 960;
 
