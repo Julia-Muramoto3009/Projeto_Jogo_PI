@@ -21,13 +21,7 @@ public class LevelLoader {
 
     /** Carrega a fase e devolve o jogador já posicionado no ponto inicial. */
     public static Entity load(int level) {
-        try {
-            setLevelFromMap("Mapa" + level + ".tmx");
-        } catch (Exception e) {
-            // Enquanto não existirem as 3 fases, reaproveita o Mapa1
-            System.err.println("[LevelLoader] Mapa" + level + ".tmx não carregou: " + e);
-            setLevelFromMap("Mapa1.tmx");
-        }
+        setLevelFromMap("Mapa" + level + ".tmx");
 
         // O chão vem depois: setLevelFromMap limpa o mundo antes de criar as entidades
         drawFloor();
